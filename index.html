@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мои инструменты</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --surface2: #1e2333;
+    --border: #2a3050;
+    --accent: #4f8aff;
+    --accent2: #7c5cff;
+    --accent3: #3ecf8e;
+    --text: #e8ecf4;
+    --text2: #8892aa;
+    --text3: #555e78;
+    --danger: #ff5c7c;
+    --card-h: 180px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background mesh */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(79,138,255,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(124,92,255,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 50% 50%, rgba(62,207,142,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    padding: 40px 0 32px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .logo-block h1 {
+    font-size: clamp(22px, 5vw, 32px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+  }
+
+  .logo-block p {
+    font-size: 13px;
+    color: var(--text3);
+    margin-top: 6px;
+    font-weight: 400;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(79,138,255,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(79,138,255,0.45); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-ghost {
+    background: var(--surface2);
+    color: var(--text2);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { background: var(--surface); color: var(--text); border-color: var(--accent); }
+
+  .btn-danger {
+    background: rgba(255,92,124,0.1);
+    color: var(--danger);
+    border: 1px solid rgba(255,92,124,0.25);
+  }
+  .btn-danger:hover { background: rgba(255,92,124,0.2); }
+
+  /* Token section */
+  .token-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .token-section.connected {
+    border-color: rgba(62,207,142,0.35);
+    background: rgba(62,207,142,0.05);
+  }
+
+  .token-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--text3);
+    flex-shrink: 0;
+  }
+  .token-dot.active {
+    background: var(--accent3);
+    box-shadow: 0 0 8px rgba(62,207,142,0.6);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .token-info { flex: 1; min-width: 200px; }
+  .token-info label {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .token-info span {
+    font-size: 13px;
+    color: var(--text2);
+  }
+  .token-info span.ok { color: var(--accent3); font-weight: 600; }
+
+  .token-input-row {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+    min-width: 240px;
+  }
+
+  input[type="text"], input[type="password"] {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 9px 13px;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.15s;
+  }
+  input:focus { border-color: var(--accent); }
+
+  /* Search & filters */
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .search-wrap {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text3);
+    pointer-events: none;
+  }
+
+  .search-wrap input {
+    padding-left: 38px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text3);
+    transition: all 0.15s;
+    font-family: 'Manrope', sans-serif;
+  }
+  .tab.active, .tab:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text3);
+  }
+
+  .stat strong {
+    color: var(--text);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.3s ease both;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(79,138,255,0.15);
+  }
+
+  .card-color-bar {
+    height: 3px;
+    width: 100%;
+  }
+
+  .card-body {
+    padding: 20px;
+    flex: 1;
+  }
+
+  .card-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 14px;
+    background: var(--surface2);
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    color: var(--text3);
+    line-height: 1.5;
+  }
+
+  .card-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-date {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .icon-btn {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.15s;
+    background: var(--surface2);
+    color: var(--text3);
+  }
+  .icon-btn:hover { background: var(--accent); color: #fff; }
+  .icon-btn.delete:hover { background: var(--danger); }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text3);
+    grid-column: 1 / -1;
+  }
+
+  .empty-state .big-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
+  .empty-state h3 { font-size: 18px; color: var(--text2); margin-bottom: 8px; }
+  .empty-state p { font-size: 14px; line-height: 1.6; }
+
+  /* Modal overlay */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    width: 100%;
+    max-width: 480px;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.2s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .overlay.open .modal {
+    transform: scale(1) translateY(0);
+  }
+
+  .modal h2 {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text2);
+    margin-bottom: 7px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .form-group input[type="text"] {
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 32px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--bg);
+  }
+
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--accent);
+    background: rgba(79,138,255,0.05);
+  }
+
+  .drop-zone .dz-icon { font-size: 32px; margin-bottom: 10px; opacity: 0.5; }
+  .drop-zone p { font-size: 13px; color: var(--text3); }
+  .drop-zone span { color: var(--accent); font-weight: 600; }
+  .drop-zone .file-name {
+    margin-top: 10px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent3);
+    font-weight: 600;
+  }
+
+  .emoji-picker {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .emoji-opt {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .emoji-opt.selected, .emoji-opt:hover {
+    border-color: var(--accent);
+    background: rgba(79,138,255,0.1);
+  }
+
+  .color-picker {
+    display: flex;
+    gap: 8px;
+  }
+
+  .color-opt {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .color-opt.selected {
+    border-color: var(--text);
+    transform: scale(1.2);
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    justify-content: flex-end;
+  }
+
+  /* Progress / status */
+  .status-msg {
+    margin-top: 14px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: none;
+  }
+  .status-msg.show { display: block; }
+  .status-msg.success { background: rgba(62,207,142,0.1); color: var(--accent3); border: 1px solid rgba(62,207,142,0.25); }
+  .status-msg.error { background: rgba(255,92,124,0.1); color: var(--danger); border: 1px solid rgba(255,92,124,0.25); }
+  .status-msg.loading { background: rgba(79,138,255,0.1); color: var(--accent); border: 1px solid rgba(79,138,255,0.25); }
+
+  /* Token modal specific */
+  .token-steps {
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+  .token-steps p {
+    font-size: 12px;
+    color: var(--text3);
+    line-height: 1.7;
+    margin: 0;
+  }
+  .token-steps a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .token-steps code {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--surface2);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--accent3);
+  }
+
+  /* Repo info row */
+  .repo-row {
+    display: flex;
+    gap: 10px;
+  }
+  .repo-row .form-group { flex: 1; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 20px 0 40px;
+    font-size: 12px;
+    color: var(--text3);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  @media (max-width: 500px) {
+    header { flex-direction: column; align-items: flex-start; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="logo-block">
+      <h1>⚡ Мои инструменты</h1>
+      <p>// personal tools hub</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-ghost" onclick="openTokenModal()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        GitHub
+      </button>
+      <button class="btn btn-primary" onclick="openAddModal()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Добавить
+      </button>
+    </div>
+  </header>
+
+  <!-- Token status -->
+  <div class="token-section" id="tokenSection">
+    <div class="token-dot" id="tokenDot"></div>
+    <div class="token-info">
+      <label>GitHub статус</label>
+      <span id="tokenStatus">Не подключён — нажмите «GitHub» для настройки</span>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Поиск инструментов..." oninput="renderCards()">
+    </div>
+    <div class="filter-tabs" id="filterTabs">
+      <button class="tab active" data-cat="all" onclick="setFilter('all', this)">Все</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat">Инструментов: <strong id="totalCount">0</strong></div>
+    <div class="stat">Категорий: <strong id="catCount">0</strong></div>
+  </div>
+
+  <!-- Grid -->
+  <div class="grid" id="toolsGrid"></div>
+
+  <footer>built with Claude · hosted on GitHub Pages</footer>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- MODAL: Token / GitHub settings      -->
+<!-- ═══════════════════════════════════ -->
+<div class="overlay" id="tokenOverlay" onclick="closeIfOverlay(event,'tokenOverlay')">
+  <div class="modal">
+    <h2>🔐 Настройка GitHub</h2>
+
+    <div class="token-steps">
+      <p>
+        <strong>Как получить токен:</strong><br>
+        1. Зайди на <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a><br>
+        2. Название: любое (например <code>my-tools</code>)<br>
+        3. Срок: выбери <code>No expiration</code><br>
+        4. Поставь галочку <code>repo</code> (полный доступ)<br>
+        5. Нажми «Generate token» — скопируй строку
+      </p>
+    </div>
+
+    <div class="repo-row">
+      <div class="form-group">
+        <label>GitHub Username</label>
+        <input type="text" id="ghUser" placeholder="твой_логин">
+      </div>
+      <div class="form-group">
+        <label>Репозиторий</label>
+        <input type="text" id="ghRepo" placeholder="my-tools">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>GitHub Token</label>
+      <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+    </div>
+
+    <div id="tokenStatus2" class="status-msg"></div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('tokenOverlay')">Отмена</button>
+      <button class="btn btn-primary" onclick="saveToken()">Сохранить и проверить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- MODAL: Add tool                     -->
+<!-- ═══════════════════════════════════ -->
+<div class="overlay" id="addOverlay" onclick="closeIfOverlay(event,'addOverlay')">
+  <div class="modal">
+    <h2>➕ Добавить инструмент</h2>
+
+    <div class="form-group">
+      <label>Название</label>
+      <input type="text" id="toolName" placeholder="Трекер калорий">
+    </div>
+
+    <div class="form-group">
+      <label>Описание (необязательно)</label>
+      <input type="text" id="toolDesc" placeholder="Подсчёт КБЖУ за день">
+    </div>
+
+    <div class="form-group">
+      <label>Категория</label>
+      <input type="text" id="toolCat" placeholder="Здоровье / Финансы / Работа / ...">
+    </div>
+
+    <div class="form-group">
+      <label>Иконка</label>
+      <div class="emoji-picker" id="emojiPicker"></div>
+    </div>
+
+    <div class="form-group">
+      <label>Цвет карточки</label>
+      <div class="color-picker" id="colorPicker"></div>
+    </div>
+
+    <div class="form-group">
+      <label>HTML файл</label>
+      <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()"
+           ondragover="dzDragOver(event)" ondragleave="dzDragLeave()" ondrop="dzDrop(event)">
+        <div class="dz-icon">📂</div>
+        <p>Нажми или перетащи <span>.html файл</span></p>
+        <div class="file-name" id="fileName"></div>
+      </div>
+      <input type="file" id="fileInput" accept=".html" style="display:none" onchange="fileSelected(this)">
+    </div>
+
+    <div id="addStatus" class="status-msg"></div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('addOverlay')">Отмена</button>
+      <button class="btn btn-primary" onclick="uploadTool()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+        Загрузить в GitHub
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let tools = [];
+let selectedEmoji = '🔧';
+let selectedColor = '#4f8aff';
+let selectedFile = null;
+let currentFilter = 'all';
+
+const EMOJIS = ['🔧','📊','💪','🥗','💰','📝','🎯','⏱️','🧮','📅','🎵','🌐','🔬','🏃','🛒','📈','💊','🎮','🔒','✅'];
+const COLORS = ['#4f8aff','#7c5cff','#3ecf8e','#ff5c7c','#ffb547','#00d4ff','#ff7c5c','#a8ff3e'];
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+function init() {
+  buildEmojiPicker();
+  buildColorPicker();
+  loadLocal();
+  renderCards();
+  checkTokenStatus();
+}
+
+function loadLocal() {
+  const saved = localStorage.getItem('tools_list');
+  if (saved) tools = JSON.parse(saved);
+}
+
+function saveLocal() {
+  localStorage.setItem('tools_list', JSON.stringify(tools));
+}
+
+// ═══════════════════════════════════════
+// PICKERS
+// ═══════════════════════════════════════
+function buildEmojiPicker() {
+  const el = document.getElementById('emojiPicker');
+  el.innerHTML = EMOJIS.map(e =>
+    `<div class="emoji-opt ${e===selectedEmoji?'selected':''}" onclick="selectEmoji('${e}',this)">${e}</div>`
+  ).join('');
+}
+
+function buildColorPicker() {
+  const el = document.getElementById('colorPicker');
+  el.innerHTML = COLORS.map(c =>
+    `<div class="color-opt ${c===selectedColor?'selected':''}" style="background:${c}" onclick="selectColor('${c}',this)"></div>`
+  ).join('');
+}
+
+function selectEmoji(e, el) {
+  selectedEmoji = e;
+  document.querySelectorAll('.emoji-opt').forEach(x => x.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectColor(c, el) {
+  selectedColor = c;
+  document.querySelectorAll('.color-opt').forEach(x => x.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ═══════════════════════════════════════
+// FILE
+// ═══════════════════════════════════════
+function fileSelected(input) {
+  if (input.files[0]) {
+    selectedFile = input.files[0];
+    document.getElementById('fileName').textContent = '✓ ' + selectedFile.name;
+    if (!document.getElementById('toolName').value) {
+      document.getElementById('toolName').value = selectedFile.name.replace('.html','');
+    }
+  }
+}
+
+function dzDragOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('drag-over'); }
+function dzDragLeave() { document.getElementById('dropZone').classList.remove('drag-over'); }
+function dzDrop(e) {
+  e.preventDefault();
+  dzDragLeave();
+  const file = e.dataTransfer.files[0];
+  if (file && file.name.endsWith('.html')) {
+    selectedFile = file;
+    document.getElementById('fileName').textContent = '✓ ' + file.name;
+    if (!document.getElementById('toolName').value)
+      document.getElementById('toolName').value = file.name.replace('.html','');
+  }
+}
+
+// ═══════════════════════════════════════
+// GITHUB
+// ═══════════════════════════════════════
+function getGH() {
+  return {
+    token: localStorage.getItem('gh_token') || '',
+    user:  localStorage.getItem('gh_user')  || '',
+    repo:  localStorage.getItem('gh_repo')  || ''
+  };
+}
+
+function checkTokenStatus() {
+  const gh = getGH();
+  const dot = document.getElementById('tokenDot');
+  const status = document.getElementById('tokenStatus');
+  const section = document.getElementById('tokenSection');
+
+  if (gh.token && gh.user && gh.repo) {
+    dot.classList.add('active');
+    status.className = 'ok';
+    status.textContent = `${gh.user}/${gh.repo} — подключён`;
+    section.classList.add('connected');
+  } else {
+    dot.classList.remove('active');
+    status.className = '';
+    status.textContent = 'Не подключён — нажмите «GitHub» для настройки';
+    section.classList.remove('connected');
+  }
+}
+
+async function saveToken() {
+  const token = document.getElementById('ghToken').value.trim();
+  const user  = document.getElementById('ghUser').value.trim();
+  const repo  = document.getElementById('ghRepo').value.trim();
+  const st    = document.getElementById('tokenStatus2');
+
+  if (!token || !user || !repo) {
+    showStatus(st, 'error', 'Заполни все поля');
+    return;
+  }
+
+  showStatus(st, 'loading', '⏳ Проверяю подключение...');
+
+  try {
+    const r = await fetch(`https://api.github.com/repos/${user}/${repo}`, {
+      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+    });
+
+    if (r.ok) {
+      localStorage.setItem('gh_token', token);
+      localStorage.setItem('gh_user', user);
+      localStorage.setItem('gh_repo', repo);
+      showStatus(st, 'success', '✅ Подключено успешно!');
+      checkTokenStatus();
+      setTimeout(() => closeModal('tokenOverlay'), 1200);
+    } else {
+      showStatus(st, 'error', '❌ Ошибка: проверь токен и название репозитория');
+    }
+  } catch(e) {
+    showStatus(st, 'error', '❌ Нет соединения');
+  }
+}
+
+async function uploadToGitHub(filename, content) {
+  const gh = getGH();
+  const encoded = btoa(unescape(encodeURIComponent(content)));
+
+  // Check if file exists (to get sha for update)
+  let sha = null;
+  try {
+    const check = await fetch(`https://api.github.com/repos/${gh.user}/${gh.repo}/contents/tools/${filename}`, {
+      headers: { Authorization: `token ${gh.token}`, Accept: 'application/vnd.github.v3+json' }
+    });
+    if (check.ok) {
+      const data = await check.json();
+      sha = data.sha;
+    }
+  } catch(e) {}
+
+  const body = {
+    message: `Add tool: ${filename}`,
+    content: encoded,
+    ...(sha ? { sha } : {})
+  };
+
+  const r = await fetch(`https://api.github.com/repos/${gh.user}/${gh.repo}/contents/tools/${filename}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `token ${gh.token}`,
+      Accept: 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+
+  return r.ok;
+}
+
+async function saveIndexToGitHub(toolsList) {
+  const gh = getGH();
+  const content = JSON.stringify(toolsList, null, 2);
+  const encoded = btoa(unescape(encodeURIComponent(content)));
+
+  let sha = null;
+  try {
+    const check = await fetch(`https://api.github.com/repos/${gh.user}/${gh.repo}/contents/data/tools.json`, {
+      headers: { Authorization: `token ${gh.token}`, Accept: 'application/vnd.github.v3+json' }
+    });
+    if (check.ok) { sha = (await check.json()).sha; }
+  } catch(e) {}
+
+  const body = {
+    message: 'Update tools index',
+    content: encoded,
+    ...(sha ? { sha } : {})
+  };
+
+  await fetch(`https://api.github.com/repos/${gh.user}/${gh.repo}/contents/data/tools.json`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `token ${gh.token}`,
+      Accept: 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+}
+
+async function loadFromGitHub() {
+  const gh = getGH();
+  if (!gh.token) return;
+  try {
+    const r = await fetch(`https://api.github.com/repos/${gh.user}/${gh.repo}/contents/data/tools.json`, {
+      headers: { Authorization: `token ${gh.token}`, Accept: 'application/vnd.github.v3+json' }
+    });
+    if (r.ok) {
+      const data = await r.json();
+      const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g,''))));
+      tools = JSON.parse(decoded);
+      saveLocal();
+      renderCards();
+    }
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════
+// UPLOAD TOOL
+// ═══════════════════════════════════════
+async function uploadTool() {
+  const name = document.getElementById('toolName').value.trim();
+  const desc = document.getElementById('toolDesc').value.trim();
+  const cat  = document.getElementById('toolCat').value.trim() || 'Другое';
+  const st   = document.getElementById('addStatus');
+  const gh   = getGH();
+
+  if (!name) { showStatus(st, 'error', 'Введи название'); return; }
+  if (!selectedFile) { showStatus(st, 'error', 'Выбери HTML файл'); return; }
+  if (!gh.token) { showStatus(st, 'error', 'Сначала настрой GitHub (кнопка «GitHub» вверху)'); return; }
+
+  showStatus(st, 'loading', '⏳ Загружаю файл в GitHub...');
+
+  const content = await selectedFile.text();
+  const filename = selectedFile.name;
+  const gh_ = getGH();
+
+  const ok = await uploadToGitHub(filename, content);
+
+  if (!ok) {
+    showStatus(st, 'error', '❌ Ошибка загрузки. Проверь токен и права доступа.');
+    return;
+  }
+
+  const tool = {
+    id: Date.now(),
+    name,
+    desc,
+    cat,
+    emoji: selectedEmoji,
+    color: selectedColor,
+    file: `tools/${filename}`,
+    url: `https://${gh_.user}.github.io/${gh_.repo}/tools/${filename}`,
+    added: new Date().toLocaleDateString('ru-RU')
+  };
+
+  tools.push(tool);
+  saveLocal();
+
+  showStatus(st, 'loading', '⏳ Обновляю список инструментов...');
+  await saveIndexToGitHub(tools);
+
+  showStatus(st, 'success', `✅ «${name}» добавлен!`);
+  renderCards();
+
+  setTimeout(() => {
+    closeModal('addOverlay');
+    resetAddForm();
+  }, 1200);
+}
+
+function resetAddForm() {
+  document.getElementById('toolName').value = '';
+  document.getElementById('toolDesc').value = '';
+  document.getElementById('toolCat').value = '';
+  document.getElementById('fileName').textContent = '';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('addStatus').className = 'status-msg';
+  selectedFile = null;
+  selectedEmoji = '🔧';
+  selectedColor = '#4f8aff';
+  buildEmojiPicker();
+  buildColorPicker();
+}
+
+// ═══════════════════════════════════════
+// DELETE
+// ═══════════════════════════════════════
+async function deleteTool(id, event) {
+  event.stopPropagation();
+  if (!confirm('Удалить этот инструмент из списка?')) return;
+  tools = tools.filter(t => t.id !== id);
+  saveLocal();
+  const gh = getGH();
+  if (gh.token) await saveIndexToGitHub(tools);
+  renderCards();
+}
+
+// ═══════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════
+function renderCards() {
+  const grid = document.getElementById('toolsGrid');
+  const q = document.getElementById('searchInput').value.toLowerCase();
+
+  let filtered = tools.filter(t => {
+    const matchCat = currentFilter === 'all' || t.cat === currentFilter;
+    const matchQ = !q || t.name.toLowerCase().includes(q) || (t.desc||'').toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+
+  // Update stats
+  document.getElementById('totalCount').textContent = tools.length;
+  const cats = [...new Set(tools.map(t => t.cat))];
+  document.getElementById('catCount').textContent = cats.length;
+
+  // Update filter tabs
+  const tabsEl = document.getElementById('filterTabs');
+  const existingCats = tabsEl.querySelectorAll('[data-cat]:not([data-cat="all"])');
+  existingCats.forEach(el => el.remove());
+  cats.forEach(cat => {
+    if (!tabsEl.querySelector(`[data-cat="${cat}"]`)) {
+      const btn = document.createElement('button');
+      btn.className = 'tab' + (currentFilter === cat ? ' active' : '');
+      btn.dataset.cat = cat;
+      btn.textContent = cat;
+      btn.onclick = () => setFilter(cat, btn);
+      tabsEl.appendChild(btn);
+    }
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty-state">
+      <div class="big-icon">🗂️</div>
+      <h3>${tools.length === 0 ? 'Пока нет инструментов' : 'Ничего не найдено'}</h3>
+      <p>${tools.length === 0 ? 'Нажми «Добавить» чтобы загрузить первый HTML инструмент' : 'Попробуй другой запрос или категорию'}</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((t, i) => `
+    <div class="card" onclick="openTool('${t.url}')" style="animation-delay:${i*0.05}s">
+      <div class="card-color-bar" style="background:linear-gradient(90deg,${t.color},${t.color}88)"></div>
+      <div class="card-body">
+        <div class="card-icon" style="background:${t.color}22">${t.emoji}</div>
+        <div class="card-title">${t.name}</div>
+        <div class="card-desc">${t.desc || t.cat}</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-date">${t.added}</span>
+        <div class="card-actions">
+          <button class="icon-btn" title="Открыть" onclick="event.stopPropagation();openTool('${t.url}')">↗</button>
+          <button class="icon-btn delete" title="Удалить" onclick="deleteTool(${t.id},event)">✕</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openTool(url) {
+  window.open(url, '_blank');
+}
+
+function setFilter(cat, el) {
+  currentFilter = cat;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderCards();
+}
+
+// ═══════════════════════════════════════
+// MODALS
+// ═══════════════════════════════════════
+function openTokenModal() {
+  const gh = getGH();
+  document.getElementById('ghUser').value = gh.user;
+  document.getElementById('ghRepo').value = gh.repo;
+  document.getElementById('ghToken').value = gh.token;
+  document.getElementById('tokenStatus2').className = 'status-msg';
+  openModal('tokenOverlay');
+}
+
+function openAddModal() {
+  const gh = getGH();
+  if (!gh.token) {
+    if (confirm('Сначала нужно настроить GitHub. Открыть настройки?')) openTokenModal();
+    return;
+  }
+  resetAddForm();
+  openModal('addOverlay');
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeIfOverlay(e, id) { if (e.target.id === id) closeModal(id); }
+
+// ═══════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════
+function showStatus(el, type, msg) {
+  el.className = `status-msg ${type} show`;
+  el.textContent = msg;
+}
+
+// ═══════════════════════════════════════
+// START
+// ═══════════════════════════════════════
+init();
+loadFromGitHub();
+</script>
+</body>
+</html>
