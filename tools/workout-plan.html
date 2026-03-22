@@ -38,7 +38,12 @@ header{
   background:linear-gradient(180deg,#16161a 0%,#0c0c0e 100%);
   border-bottom:1px solid var(--border);
   padding:16px 16px 0;
+}
+.hdr-sticky{
   position:sticky;top:0;z-index:200;
+  background:linear-gradient(180deg,#16161a 0%,#0c0c0e 100%);
+  border-bottom:1px solid var(--border);
+  padding:0 16px;
 }
 .hdr-top{display:flex;align-items:center;gap:14px;margin-bottom:12px;flex-wrap:wrap}
 .logo{font-family:var(--font-display);font-size:2rem;letter-spacing:3px;line-height:1}
@@ -100,15 +105,15 @@ main{padding:16px;max-width:860px;margin:0 auto}
 .ws-btn:hover{border-color:var(--accent);color:var(--accent)}
 
 /* progress */
-.progress-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px}
-.pw-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.progress-wrap{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:8px 16px;z-index:290}
+.progress-wrap .pw-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}.pw-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .pw-label{font-family:var(--font-mono);font-size:0.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
 .pw-val{font-family:var(--font-display);font-size:1rem;color:var(--accent);letter-spacing:1px}
 .prog-outer{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden}
 .prog-inner{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:3px;transition:width .4s cubic-bezier(.4,0,.2,1)}
 
 /* timer bar */
-.timer-bar{display:none;background:var(--surface);border:1px solid var(--accent2);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px;align-items:center;gap:12px}
+.timer-bar{display:none;position:fixed;bottom:56px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:828px;background:var(--surface);border:1px solid var(--accent2);border-radius:var(--radius);padding:12px 14px;align-items:center;gap:12px;z-index:300;box-shadow:0 -4px 24px rgba(0,0,0,0.7)}
 .timer-bar.visible{display:flex}
 .tb-label{font-family:var(--font-mono);font-size:0.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
 .tb-time{font-family:var(--font-display);font-size:1.8rem;color:var(--accent2);letter-spacing:2px;flex:1}
@@ -249,6 +254,38 @@ canvas{width:100%!important;display:block}
 .toast.ok{border-color:var(--accent3);color:var(--accent3)}
 .toast.err{border-color:var(--red);color:var(--red)}
 
+/* ── TECH MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:600;align-items:flex-end;justify-content:center}
+.modal-overlay.visible{display:flex}
+.modal-box{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius) var(--radius) 0 0;padding:20px 16px 32px;width:100%;max-width:860px;max-height:85vh;overflow-y:auto}
+.modal-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.modal-title{font-family:var(--font-display);font-size:1.3rem;letter-spacing:1px;flex:1}
+.modal-close{background:none;border:1px solid var(--border2);border-radius:5px;color:var(--text3);padding:5px 12px;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem}
+.modal-section{margin-bottom:14px}
+.modal-section-label{font-family:var(--font-mono);font-size:0.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.modal-tips{list-style:none}
+.modal-tips li{padding:5px 0;border-bottom:1px solid var(--border);font-size:0.85rem;color:var(--text);display:flex;gap:8px}
+.modal-tips li:last-child{border-bottom:none}
+.modal-tips li::before{content:'✓';color:var(--accent3);flex-shrink:0}
+.modal-mistakes{list-style:none}
+.modal-mistakes li{padding:5px 0;border-bottom:1px solid var(--border);font-size:0.85rem;color:var(--text2);display:flex;gap:8px}
+.modal-mistakes li:last-child{border-bottom:none}
+.modal-mistakes li::before{content:'✗';color:var(--red);flex-shrink:0}
+.modal-yt{display:inline-flex;align-items:center;gap:6px;background:rgba(255,140,66,.12);border:1px solid var(--accent2);border-radius:6px;padding:8px 14px;color:var(--accent2);text-decoration:none;font-family:var(--font-mono);font-size:0.72rem;margin-top:4px}
+
+/* tip btn */
+.tip-btn{background:none;border:1px solid var(--border2);border-radius:50%;width:22px;height:22px;color:var(--text3);font-family:var(--font-mono);font-size:0.65rem;cursor:pointer;flex-shrink:0;transition:all .2s;display:inline-flex;align-items:center;justify-content:center}
+.tip-btn:hover{border-color:var(--accent3);color:var(--accent3)}
+
+/* alt badge */
+.tag-alt{background:rgba(232,245,90,.1);color:var(--accent);font-family:var(--font-mono);font-size:0.6rem;padding:2px 7px;border-radius:3px}
+
+/* draft banner */
+.draft-banner{display:none;background:rgba(255,140,66,.1);border:1px solid var(--accent2);border-radius:var(--radius);padding:10px 14px;margin-bottom:12px;font-family:var(--font-mono);font-size:0.72rem;color:var(--accent2);align-items:center;gap:10px}
+.draft-banner.visible{display:flex}
+.draft-restore{background:var(--accent2);color:#000;border:none;border-radius:4px;padding:5px 12px;font-family:var(--font-mono);font-size:0.68rem;cursor:pointer;font-weight:700}
+.draft-discard{background:none;border:1px solid var(--border2);border-radius:4px;padding:5px 10px;font-family:var(--font-mono);font-size:0.68rem;color:var(--text3);cursor:pointer}
+
 @media(max-width:560px){
   .sets-grid-header,.set-row{grid-template-columns:24px 1fr 1fr 62px}
   .logo{font-size:1.6rem}
@@ -267,6 +304,7 @@ canvas{width:100%!important;display:block}
       <span id="syncLabel">—</span>
     </div>
   </div>
+  <div class="hdr-sticky">
   <div class="stats-row">
     <div class="stat-pill"><div class="stat-v" id="statWeek">1</div><div class="stat-l">Неделя</div></div>
     <div class="stat-pill"><div class="stat-v" id="statSessions">0</div><div class="stat-l">Тренировок</div></div>
@@ -281,12 +319,19 @@ canvas{width:100%!important;display:block}
     <button class="nav-btn" onclick="switchTab('stats',this)">СТАТИСТИКА</button>
     <button class="nav-btn" onclick="switchTab('principles',this)">БАЗА</button>
   </div>
+  </div>
 </header>
 
 <main>
 
 <!-- ══ WORKOUTS ══ -->
 <div class="tab-panel active" id="tab-workouts">
+
+  <div class="draft-banner" id="draftBanner">
+    <span>📋 Есть незавершённая тренировка</span>
+    <button class="draft-restore" onclick="restoreDraft()">Восстановить</button>
+    <button class="draft-discard" onclick="discardDraft()">Удалить</button>
+  </div>
   <div class="week-grid">
     <div class="wday off"><div class="wday-name">Пн</div><div class="wday-val">Работа</div></div>
     <div class="wday off"><div class="wday-name">Вт</div><div class="wday-val">Работа</div></div>
@@ -411,6 +456,24 @@ canvas{width:100%!important;display:block}
 
 </main>
 
+<div class="modal-overlay" id="techModal" onclick="closeTechModal(event)">
+  <div class="modal-box">
+    <div class="modal-top">
+      <div class="modal-title" id="modalTitle">Техника</div>
+      <button class="modal-close" onclick="closeTechModalDirect()">✕ закрыть</button>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-label">✓ Как делать правильно</div>
+      <ul class="modal-tips" id="modalTips"></ul>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-label">✗ Частые ошибки</div>
+      <ul class="modal-mistakes" id="modalMistakes"></ul>
+    </div>
+    <div id="modalYtWrap"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -426,18 +489,18 @@ const WORKOUTS = {
     note: '<b>⚡ Среда после смены</b> — облегчённый вариант. Ты уставший — это нормально. Просто зайди и сделай.',
     variants: [
       [
-        {name:'Приседания со штангой', muscles:'Ноги, ягодицы', sets:3, reps:'8', sw:'20', rest:180, yt:'https://www.youtube.com/results?search_query=денис+борисов+приседания+техника'},
-        {name:'Жим штанги лёжа', muscles:'Грудь, трицепс', sets:3, reps:'8', sw:'20', rest:180, yt:'https://www.youtube.com/results?search_query=жим+лёжа+техника+начинающих'},
-        {name:'Тяга штанги в наклоне', muscles:'Спина, бицепс', sets:3, reps:'8', sw:'20', rest:180, yt:'https://www.youtube.com/results?search_query=тяга+штанги+наклон+техника'},
-        {name:'Жим гантелей сидя', muscles:'Плечи', sets:3, reps:'10', sw:'8', rest:120, yt:'https://www.youtube.com/results?search_query=жим+гантелей+сидя+техника'},
-        {name:'Планка', muscles:'Кор', sets:3, reps:'30 сек', sw:'—', rest:60, yt:null},
+        {name:'Приседания со штангой', muscles:'Ноги, ягодицы', sets:3, reps:'8', sw:'20', rest:180, yt:'https://www.youtube.com/results?search_query=денис+борисов+приседания+техника', tips:['Ноги на ширине плеч, носки чуть врозь','Гриф на трапециях, не на шее','Спина прямая, грудь вперёд','Колени идут в сторону носков','Опускайся до параллели с полом или ниже'], mistakes:['Колени внутрь — опасно!','Отрыв пяток от пола','Сгибание поясницы']},
+        {name:'Жим штанги лёжа', muscles:'Грудь, трицепс', sets:3, reps:'8', sw:'20', rest:180, yt:'https://www.youtube.com/results?search_query=жим+лёжа+техника+начинающих', tips:['Лопатки сведены и прижаты к скамье','Хват чуть шире плеч','Опускай гриф к нижней части груди','Ноги стоят на полу, поясница чуть прогнута','Жми вверх и чуть назад'], mistakes:['Отрыв ягодиц от скамьи','Гриф падает слишком высоко к шее','Неполная амплитуда']},
+        {name:'Тяга штанги в наклоне', muscles:'Спина, бицепс', sets:3, reps:'8', sw:'20', rest:180, yt:'https://www.youtube.com/results?search_query=тяга+штанги+наклон+техника', tips:['Наклон корпуса ~45°','Спина прямая, поясница не округляется','Тяни к поясу, локти вдоль тела','Лопатки сводятся в конечной точке','Гриф ведёт предплечье, не бицепс'], mistakes:['Округление спины — травма!','Рывки корпусом','Тяга к груди вместо пояса']},
+        {name:'Жим гантелей сидя', muscles:'Плечи', sets:3, reps:'10', sw:'8', rest:120, yt:'https://www.youtube.com/results?search_query=жим+гантелей+сидя+техника', tips:['Спина прямая, опёрта на скамью','Гантели на уровне ушей в старте','Жми строго вверх, не сводя над головой','Не запрокидывай голову назад'], mistakes:['Прогиб поясницы','Неполное опускание гантелей','Рывки']},
+        {name:'Планка', muscles:'Кор', sets:3, reps:'30 сек', sw:'—', rest:60, yt:null, tips:['Опора на предплечья и носки','Тело — прямая линия от головы до пят','Напряги пресс и ягодицы','Не поднимай и не опускай таз','Дыши равномерно'], mistakes:['Таз вверх — не работает пресс','Таз вниз — нагрузка на поясницу','Задержка дыхания']},
       ],
       [
-        {name:'Фронтальные приседания', muscles:'Ноги, квадрицепс', sets:3, reps:'8', sw:'15', rest:180, yt:'https://www.youtube.com/results?search_query=фронтальные+приседания+техника'},
-        {name:'Жим гантелей лёжа', muscles:'Грудь, трицепс', sets:3, reps:'10', sw:'12', rest:180, yt:'https://www.youtube.com/results?search_query=жим+гантелей+лёжа+техника'},
-        {name:'Тяга гантели одной рукой', muscles:'Спина, бицепс', sets:3, reps:'10', sw:'12', rest:150, yt:'https://www.youtube.com/results?search_query=тяга+гантели+одной+рукой+техника'},
-        {name:'Армейский жим стоя', muscles:'Плечи', sets:3, reps:'10', sw:'20', rest:150, yt:'https://www.youtube.com/results?search_query=армейский+жим+техника'},
-        {name:'Боковая планка', muscles:'Кор, косые', sets:3, reps:'25 сек', sw:'—', rest:60, yt:null},
+        {name:'Фронтальные приседания', muscles:'Ноги, квадрицепс', sets:3, reps:'8', sw:'15', rest:180, yt:'https://www.youtube.com/results?search_query=фронтальные+приседания+техника', tips:['Гриф лежит на передних дельтах','Локти подняты высоко вперёд','Спина строго вертикальная','Колени над носками, не заваливай внутрь','Глубина — до параллели'], mistakes:['Опускание локтей — гриф упадёт','Наклон корпуса вперёд','Отрыв пяток']},
+        {name:'Жим гантелей лёжа', muscles:'Грудь, трицепс', sets:3, reps:'10', sw:'12', rest:180, yt:'https://www.youtube.com/results?search_query=жим+гантелей+лёжа+техника', tips:['Гантели на уровне груди в старте','Лопатки сведены и вдавлены в скамью','Жми вверх, слегка сводя гантели','Опускай медленно — 2–3 секунды','Вес одной гантели'], mistakes:['Отрыв поясницы','Гантели слишком широко','Рывок снизу']},
+        {name:'Тяга гантели одной рукой', muscles:'Спина, бицепс', sets:3, reps:'10', sw:'12', rest:150, alt:true, yt:'https://www.youtube.com/results?search_query=тяга+гантели+одной+рукой+техника', tips:['Колено и рука опираются на скамью','Спина параллельна полу','Тяни локоть вверх и назад','Лопатка в верхней точке сжимается','Плечо не поворачивай'], mistakes:['Поворот корпуса для помощи','Тяга бицепсом вместо спины','Неполная амплитуда']},
+        {name:'Армейский жим стоя', muscles:'Плечи', sets:3, reps:'10', sw:'20', rest:150, yt:'https://www.youtube.com/results?search_query=армейский+жим+техника', tips:['Ноги на ширине плеч, стоишь устойчиво','Гриф у ключиц в старте','Жми строго вертикально вверх','Голову чуть убирай назад чтобы не задеть','В верхней точке руки прямые'], mistakes:['Прогиб поясницы — опасно!','Читинг ногами','Неполное выпрямление рук']},
+        {name:'Боковая планка', muscles:'Кор, косые', sets:3, reps:'25 сек', sw:'—', rest:60, alt:true, yt:null, tips:['Опора на предплечье и ребро стопы','Тело — прямая диагональная линия','Таз не опускай и не поднимай','Свободная рука вверх или на боку','Потом меняй сторону'], mistakes:['Таз провисает вниз','Перекос корпуса вперёд или назад']},
       ]
     ]
   },
@@ -447,22 +510,22 @@ const WORKOUTS = {
     note: '<b>🏋️ Пятница</b> — ты отдохнул. Полная тренировка, максимальный объём. Fit Fabric — все тренажёры.',
     variants: [
       [
-        {name:'Становая тяга', muscles:'Всё тело, спина', sets:3, reps:'6', sw:'30', rest:210, yt:'https://www.youtube.com/results?search_query=денис+борисов+становая+тяга+новичок'},
-        {name:'Жим штанги лёжа', muscles:'Грудь', sets:4, reps:'8', sw:'25', rest:180, yt:'https://www.youtube.com/results?search_query=жим+лёжа+техника+начинающих'},
-        {name:'Тяга верхнего блока к груди', muscles:'Спина, бицепс', sets:3, reps:'10', sw:'30', rest:150, yt:'https://www.youtube.com/results?search_query=тяга+верхнего+блока+техника'},
-        {name:'Жим ногами в тренажёре', muscles:'Ноги', sets:3, reps:'12', sw:'50', rest:150, yt:'https://www.youtube.com/results?search_query=жим+ногами+тренажёр+техника'},
-        {name:'Разгибания рук на блоке', muscles:'Трицепс', sets:3, reps:'12', sw:'15', rest:90, yt:'https://www.youtube.com/results?search_query=разгибания+на+блоке+трицепс'},
-        {name:'Сгибания рук с гантелями', muscles:'Бицепс', sets:3, reps:'12', sw:'9', rest:90, yt:'https://www.youtube.com/results?search_query=сгибания+рук+гантели+техника'},
-        {name:'Скручивания на пресс', muscles:'Пресс', sets:3, reps:'15', sw:'—', rest:60, yt:null},
+        {name:'Становая тяга', muscles:'Всё тело, спина', sets:3, reps:'6', sw:'30', rest:210, yt:'https://www.youtube.com/results?search_query=денис+борисов+становая+тяга+новичок', tips:['Ноги на ширине бёдер, носки прямо','Гриф над серединой стопы, касается голени','Спина прямая — от старта до финиша','Тяни штангу вдоль ног как по рельсам','Бёдра и плечи поднимаются одновременно'], mistakes:['Округление поясницы — травма!','Гриф отходит от ног','Рывок с пола вместо плавного разгона']},
+        {name:'Жим штанги лёжа', muscles:'Грудь', sets:4, reps:'8', sw:'25', rest:180, yt:'https://www.youtube.com/results?search_query=жим+лёжа+техника+начинающих', tips:['Лопатки сведены и прижаты к скамье','Хват чуть шире плеч','Опускай гриф к нижней части груди','Ноги на полу, лёгкий прогиб поясницы','Жми вверх и чуть назад'], mistakes:['Отрыв ягодиц','Гриф к шее','Неполная амплитуда']},
+        {name:'Тяга верхнего блока к груди', muscles:'Спина, бицепс', sets:3, reps:'10', sw:'30', rest:150, yt:'https://www.youtube.com/results?search_query=тяга+верхнего+блока+техника', tips:['Хват чуть шире плеч','Слегка откинь корпус назад','Тяни рукоять к верхней части груди','Локти идут вниз и назад','Лопатки сводятся в нижней точке'], mistakes:['Сильный наклон назад — это тяга спиной, не широчайшими','Тяга к животу','Рывки корпусом']},
+        {name:'Жим ногами в тренажёре', muscles:'Ноги', sets:3, reps:'12', sw:'50', rest:150, yt:'https://www.youtube.com/results?search_query=жим+ногами+тренажёр+техника', tips:['Ноги на ширине плеч, середина платформы','Опускай до угла 90° в колене','Не отрывай поясницу от спинки','Жми пятками, не носками','Колени не своди внутрь'], mistakes:['Отрыв поясницы','Неполная амплитуда','Блокировка коленей в верхней точке']},
+        {name:'Разгибания рук на блоке', muscles:'Трицепс', sets:3, reps:'12', sw:'15', rest:90, yt:'https://www.youtube.com/results?search_query=разгибания+на+блоке+трицепс', tips:['Локти прижаты к телу, не двигаются','Стой прямо, небольшой наклон вперёд','Разгибай до полного выпрямления','Медленно возвращай вверх'], mistakes:['Локти гуляют в стороны','Раскачка корпусом','Неполное разгибание']},
+        {name:'Сгибания рук с гантелями', muscles:'Бицепс', sets:3, reps:'12', sw:'9', rest:90, yt:'https://www.youtube.com/results?search_query=сгибания+рук+гантели+техника', tips:['Локти прижаты к телу','Поднимай обе руки одновременно или поочерёдно','В верхней точке — максимальное сжатие','Опускай медленно — 2–3 сек','Вес одной гантели'], mistakes:['Раскачка корпусом','Локти уходят вперёд','Неполное опускание']},
+        {name:'Скручивания на пресс', muscles:'Пресс', sets:3, reps:'15', sw:'—', rest:60, yt:null, tips:['Лёжа на спине, колени согнуты','Руки за головой или на груди','Поднимай только лопатки, поясница на полу','Выдох при подъёме','Медленно опускай'], mistakes:['Тяга за шею руками','Полный подъём корпуса — это уже не скручивание','Рывки']},
       ],
       [
-        {name:'Румынская тяга', muscles:'Бицепс бедра, ягодицы', sets:3, reps:'8', sw:'30', rest:210, yt:'https://www.youtube.com/results?search_query=румынская+тяга+техника'},
-        {name:'Жим на наклонной скамье', muscles:'Верх груди', sets:4, reps:'8', sw:'20', rest:180, yt:'https://www.youtube.com/results?search_query=жим+наклонная+скамья+техника'},
-        {name:'Тяга к поясу на блоке', muscles:'Спина', sets:3, reps:'10', sw:'30', rest:150, yt:'https://www.youtube.com/results?search_query=тяга+к+поясу+блок+техника'},
-        {name:'Жим ногами в тренажёре', muscles:'Ноги', sets:3, reps:'12', sw:'55', rest:150, yt:'https://www.youtube.com/results?search_query=жим+ногами+тренажёр+техника'},
-        {name:'Французский жим со штангой', muscles:'Трицепс', sets:3, reps:'12', sw:'15', rest:90, yt:'https://www.youtube.com/results?search_query=французский+жим+техника'},
-        {name:'Сгибания на блоке', muscles:'Бицепс', sets:3, reps:'12', sw:'15', rest:90, yt:'https://www.youtube.com/results?search_query=сгибания+на+блоке+бицепс'},
-        {name:'Подъём ног в висе', muscles:'Пресс, кор', sets:3, reps:'12', sw:'—', rest:60, yt:null},
+        {name:'Румынская тяга', muscles:'Бицепс бедра, ягодицы', sets:3, reps:'8', sw:'30', rest:210, yt:'https://www.youtube.com/results?search_query=румынская+тяга+техника', tips:['Ноги почти прямые, небольшой сгиб в колене','Наклон корпуса — таз отходит назад','Штанга скользит вдоль ног вниз','Спина прямая всё время','Чувствуй растяжение задней поверхности бедра'], mistakes:['Округление спины','Сгибание коленей как в приседе','Гриф отходит от ног']},
+        {name:'Жим на наклонной скамье', muscles:'Верх груди', sets:4, reps:'8', sw:'20', rest:180, yt:'https://www.youtube.com/results?search_query=жим+наклонная+скамья+техника', tips:['Угол скамьи 30–45°','Лопатки сведены и вдавлены','Опускай гриф к верхней части груди','Хват чуть шире плеч','Жми вверх и чуть к ногам'], mistakes:['Слишком большой угол — нагрузка уходит на плечи','Отрыв поясницы','Гриф к шее']},
+        {name:'Тяга к поясу на блоке', muscles:'Спина', sets:3, reps:'10', sw:'30', rest:150, yt:'https://www.youtube.com/results?search_query=тяга+к+поясу+блок+техника', tips:['Сидишь прямо, небольшой наклон вперёд','Тяни рукоять к поясу','Локти идут назад вдоль тела','Лопатки сводятся в конечной точке','Медленно возвращай вперёд'], mistakes:['Раскачка корпусом','Тяга руками, не спиной','Неполное возвращение']},
+        {name:'Жим ногами в тренажёре', muscles:'Ноги', sets:3, reps:'12', sw:'55', rest:150, yt:'https://www.youtube.com/results?search_query=жим+ногами+тренажёр+техника', tips:['Ноги на ширине плеч','Опускай до угла 90°','Поясница прижата к спинке','Жми пятками'], mistakes:['Отрыв поясницы','Колени внутрь','Полное выпрямление с блокировкой']},
+        {name:'Французский жим со штангой', muscles:'Трицепс', sets:3, reps:'12', sw:'15', rest:90, yt:'https://www.youtube.com/results?search_query=французский+жим+техника', tips:['Лёжа на скамье, руки вверху','Опускай гриф ко лбу сгибая локти','Локти неподвижны — только предплечья двигаются','Разгибай до полного выпрямления'], mistakes:['Локти разъезжаются в стороны','Слишком большой вес — опасно для локтей','Неполная амплитуда']},
+        {name:'Сгибания на блоке', muscles:'Бицепс', sets:3, reps:'12', sw:'15', rest:90, yt:'https://www.youtube.com/results?search_query=сгибания+на+блоке+бицепс', tips:['Стой у нижнего блока','Локти прижаты к телу','Тяни к плечам, сжимая бицепс вверху','Медленно опускай'], mistakes:['Раскачка','Локти уходят вперёд']},
+        {name:'Подъём ног в висе', muscles:'Пресс, кор', sets:3, reps:'12', sw:'—', rest:60, yt:null, tips:['Вис на турнике, хват надёжный','Поднимай прямые или согнутые ноги до параллели','Не раскачивайся','Медленно опускай — не бросай'], mistakes:['Раскачка корпуса','Рывок ногами','Неполный подъём']},
       ]
     ]
   },
@@ -472,22 +535,22 @@ const WORKOUTS = {
     note: '<b>💪 Воскресенье</b> — 4 дня без зала. Акцент на ноги и плечи. Хороший отдых — хорошая тренировка.',
     variants: [
       [
-        {name:'Приседания со штангой', muscles:'Ноги', sets:4, reps:'10', sw:'20', rest:180, yt:'https://www.youtube.com/results?search_query=денис+борисов+приседания+техника'},
-        {name:'Жим гантелей наклонная', muscles:'Верх груди', sets:3, reps:'10', sw:'12', rest:150, yt:'https://www.youtube.com/results?search_query=жим+гантелей+наклонная+техника'},
-        {name:'Тяга гантели одной рукой', muscles:'Спина', sets:3, reps:'10', sw:'12', rest:150, yt:'https://www.youtube.com/results?search_query=тяга+гантели+одной+рукой+техника'},
-        {name:'Армейский жим стоя', muscles:'Плечи', sets:3, reps:'10', sw:'20', rest:150, yt:'https://www.youtube.com/results?search_query=армейский+жим+техника'},
-        {name:'Разведения гантелей в стороны', muscles:'Боковые дельты', sets:3, reps:'12', sw:'6', rest:90, yt:'https://www.youtube.com/results?search_query=разведения+гантелей+стороны+техника'},
-        {name:'Выпады с гантелями', muscles:'Ноги, ягодицы', sets:3, reps:'10', sw:'9', rest:150, yt:'https://www.youtube.com/results?search_query=выпады+гантели+техника'},
-        {name:'Планка', muscles:'Кор', sets:2, reps:'40 сек', sw:'—', rest:60, yt:null},
+        {name:'Приседания со штангой', muscles:'Ноги', sets:4, reps:'10', sw:'20', rest:180, yt:'https://www.youtube.com/results?search_query=денис+борисов+приседания+техника', tips:['Ноги на ширине плеч, носки чуть врозь','Гриф на трапециях','Спина прямая, грудь вперёд','Колени над носками','Глубина до параллели или ниже'], mistakes:['Колени внутрь!','Отрыв пяток','Округление поясницы']},
+        {name:'Жим гантелей наклонная', muscles:'Верх груди', sets:3, reps:'10', sw:'12', rest:150, yt:'https://www.youtube.com/results?search_query=жим+гантелей+наклонная+техника', tips:['Угол скамьи 30–45°','Лопатки сведены','Гантели у плеч в старте','Жми вверх слегка сводя','Вес одной гантели'], mistakes:['Слишком большой угол — плечи перегружаются','Отрыв поясницы']},
+        {name:'Тяга гантели одной рукой', muscles:'Спина', sets:3, reps:'10', sw:'12', rest:150, alt:true, yt:'https://www.youtube.com/results?search_query=тяга+гантели+одной+рукой+техника', tips:['Колено и рука на скамье','Спина параллельна полу','Тяни локоть высоко вверх и назад','Лопатка сжимается вверху','Обе стороны = 1 подход'], mistakes:['Поворот корпуса','Тяга бицепсом','Неполная амплитуда']},
+        {name:'Армейский жим стоя', muscles:'Плечи', sets:3, reps:'10', sw:'20', rest:150, yt:'https://www.youtube.com/results?search_query=армейский+жим+техника', tips:['Ноги на ширине плеч','Гриф у ключиц','Жми вертикально вверх','Голову убирай чуть назад','Руки полностью выпрямляй'], mistakes:['Прогиб поясницы — опасно!','Читинг ногами']},
+        {name:'Разведения гантелей в стороны', muscles:'Боковые дельты', sets:3, reps:'12', sw:'6', rest:90, yt:'https://www.youtube.com/results?search_query=разведения+гантелей+стороны+техника', tips:['Лёгкий наклон вперёд','Руки чуть согнуты в локтях','Поднимай до уровня плеч','Мизинец выше большого пальца','Медленно опускай — 2–3 сек','Вес одной гантели'], mistakes:['Слишком большой вес — включаются трапеции','Рывки корпусом','Подъём выше плеч']},
+        {name:'Выпады с гантелями', muscles:'Ноги, ягодицы', sets:3, reps:'10', sw:'9', rest:150, alt:true, yt:'https://www.youtube.com/results?search_query=выпады+гантели+техника', tips:['Шаг вперёд — длинный','Переднее колено над носком, не выходит вперёд','Заднее колено почти касается пола','Корпус прямой','Обе ноги = 1 подход · вес одной гантели'], mistakes:['Колено выходит за носок','Наклон корпуса вперёд','Короткий шаг']},
+        {name:'Планка', muscles:'Кор', sets:2, reps:'40 сек', sw:'—', rest:60, yt:null, tips:['Опора на предплечья и носки','Тело — прямая линия','Пресс и ягодицы напряжены','Не поднимай и не опускай таз','Дыши равномерно'], mistakes:['Таз вверх','Таз вниз','Задержка дыхания']},
       ],
       [
-        {name:'Приседания с паузой внизу', muscles:'Ноги', sets:4, reps:'8', sw:'20', rest:180, yt:'https://www.youtube.com/results?search_query=приседания+пауза+техника'},
-        {name:'Разведения гантелей лёжа', muscles:'Грудь', sets:3, reps:'12', sw:'8', rest:120, yt:'https://www.youtube.com/results?search_query=разведения+гантелей+лёжа+техника'},
-        {name:'Тяга штанги в наклоне', muscles:'Спина', sets:3, reps:'10', sw:'25', rest:150, yt:'https://www.youtube.com/results?search_query=тяга+штанги+наклон+техника'},
-        {name:'Жим гантелей сидя', muscles:'Плечи', sets:3, reps:'10', sw:'9', rest:150, yt:'https://www.youtube.com/results?search_query=жим+гантелей+сидя+техника'},
-        {name:'Тяга штанги к подбородку', muscles:'Трапеции, плечи', sets:3, reps:'12', sw:'20', rest:90, yt:'https://www.youtube.com/results?search_query=тяга+штанги+подбородок+техника'},
-        {name:'Болгарские выпады', muscles:'Ноги, ягодицы', sets:3, reps:'8', sw:'8', rest:150, yt:'https://www.youtube.com/results?search_query=болгарские+выпады+техника'},
-        {name:'Скручивания на пресс', muscles:'Пресс', sets:2, reps:'20', sw:'—', rest:60, yt:null},
+        {name:'Приседания с паузой внизу', muscles:'Ноги', sets:4, reps:'8', sw:'20', rest:180, yt:'https://www.youtube.com/results?search_query=приседания+пауза+техника', tips:['Техника как обычные приседания','В нижней точке — пауза 2 секунды','Не расслабляй мышцы на паузе','Взрывной выход вверх'], mistakes:['Расслабление поясницы на паузе','Колени внутрь при выходе']},
+        {name:'Разведения гантелей лёжа', muscles:'Грудь', sets:3, reps:'12', sw:'8', rest:120, yt:'https://www.youtube.com/results?search_query=разведения+гантелей+лёжа+техника', tips:['Лёжа на горизонтальной скамье','Руки слегка согнуты в локтях','Опускай широко в стороны — чувствуй растяжение груди','Своди назад по дуге','Вес одной гантели'], mistakes:['Прямые локти — нагрузка на суставы','Слишком большой вес','Движение как жим вместо дуги']},
+        {name:'Тяга штанги в наклоне', muscles:'Спина', sets:3, reps:'10', sw:'25', rest:150, yt:'https://www.youtube.com/results?search_query=тяга+штанги+наклон+техника', tips:['Наклон ~45°','Спина прямая','Тяни к поясу','Локти вдоль тела','Лопатки сводятся вверху'], mistakes:['Округление спины','Рывки корпусом']},
+        {name:'Жим гантелей сидя', muscles:'Плечи', sets:3, reps:'10', sw:'9', rest:150, yt:'https://www.youtube.com/results?search_query=жим+гантелей+сидя+техника', tips:['Спина прямая','Гантели на уровне ушей','Жми вверх','Не своди над головой','Вес одной гантели'], mistakes:['Прогиб поясницы','Неполное опускание']},
+        {name:'Тяга штанги к подбородку', muscles:'Трапеции, плечи', sets:3, reps:'12', sw:'20', rest:90, yt:'https://www.youtube.com/results?search_query=тяга+штанги+подбородок+техника', tips:['Хват узкий — чуть уже плеч','Тяни локти высоко вверх','Гриф скользит вдоль тела','Локти выше кистей в верхней точке'], mistakes:['Широкий хват — нагрузка на плечевой сустав','Рывки','Гриф отходит от тела']},
+        {name:'Болгарские выпады', muscles:'Ноги, ягодицы', sets:3, reps:'8', sw:'8', rest:150, alt:true, yt:'https://www.youtube.com/results?search_query=болгарские+выпады+техника', tips:['Задняя нога на скамье','Шаг вперёд достаточно длинный','Опускайся вертикально вниз','Переднее колено над носком','Обе ноги = 1 подход · вес одной гантели'], mistakes:['Короткий шаг вперёд','Колено выходит за носок','Наклон корпуса вперёд']},
+        {name:'Скручивания на пресс', muscles:'Пресс', sets:2, reps:'20', sw:'—', rest:60, yt:null, tips:['Лёжа, колени согнуты','Поднимай лопатки — поясница на полу','Выдох при подъёме','Медленно опускай'], mistakes:['Тяга за шею','Полный подъём корпуса','Рывки']},
       ]
     ]
   }
@@ -547,7 +610,7 @@ async function ghGet(path) {
   const r = await fetch(ghBase()+path, {headers:ghHeaders()});
   if (!r.ok) { if(r.status===404) return null; throw new Error(r.status); }
   const d = await r.json();
-  return {content: JSON.parse(atob(d.content.replace(/\n/g,''))), sha: d.sha};
+  return {content: JSON.parse(decodeURIComponent(escape(atob(d.content.replace(/\n/g,''))))), sha: d.sha};
 }
 
 async function ghPut(path, content, sha) {
@@ -722,16 +785,18 @@ function renderExercises(exercises) {
       setsHtml += `<div class="set-row">
         <div class="set-num">${si+1}</div>
         <input class="set-inp" type="number" placeholder="${ex.sw!=='—'?ph:'—'}" value="${s.weight}"
-          oninput="setData[${idx}].sets[${si}].weight=this.value" ${ex.sw==='—'?'disabled':''}>
-        <input class="set-inp" type="text" placeholder="${ex.reps}" value="${s.reps}"
-          oninput="setData[${idx}].sets[${si}].reps=this.value">
+          oninput="setData[${idx}].sets[${si}].weight=this.value;saveDraft()" ${ex.sw==='—'?'disabled':''}>
+        <input class="set-inp" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="${ex.reps}" value="${s.reps}"
+          oninput="setData[${idx}].sets[${si}].reps=this.value;saveDraft()">
         <button class="set-done ${s.done?'ok':''}" onclick="toggleSetDone(${idx},${si})">
           ${s.done?'✓ ОК':'ОК?'}
         </button>
       </div>`;
     });
 
+    const altTag = ex.alt ? `<span class="tag tag-alt">⇄ обе стороны = 1 подход</span>` : '';
     const prTag = pr ? `<span class="tag tag-pr">🏆 PR: ${pr.weight}кг</span>` : '';
+    const hasTips = ex.tips && ex.tips.length;
     const ytHtml = ex.yt ? `<a class="yt-btn" href="${ex.yt}" target="_blank">▶ техника на YouTube</a>` : '';
 
     const card = document.createElement('div');
@@ -741,12 +806,16 @@ function renderExercises(exercises) {
       <div class="ex-card-header" onclick="toggleCardBody(${idx})">
         <div class="ex-n">${String(idx+1).padStart(2,'0')}</div>
         <div class="ex-main">
-          <div class="ex-name">${ex.name}</div>
+          <div class="ex-name" style="display:flex;align-items:center;gap:6px">
+            ${ex.name}
+            ${hasTips ? `<button class="tip-btn" onclick="event.stopPropagation();openTechModal(${idx})" title="Техника">?</button>` : ''}
+          </div>
           <div class="ex-tags">
             <span class="tag tag-sets">${ex.sets}×${ex.reps}</span>
             <span class="tag tag-muscle">${ex.muscles}</span>
             <span class="tag tag-weight">${ex.sw!=='—'?ex.sw+' кг':'без веса'}</span>
             ${prTag}
+            ${altTag}
           </div>
         </div>
         <button class="ex-check" onclick="event.stopPropagation();toggleExercise(${idx})">
@@ -765,7 +834,7 @@ function renderExercises(exercises) {
         <div class="ex-notes-wrap">
           <div class="ex-notes-label">Заметки к упражнению</div>
           <textarea class="ex-notes" placeholder="Ощущения, комментарии..."
-            oninput="setData[${idx}].notes=this.value">${setData[idx].notes}</textarea>
+            oninput="setData[${idx}].notes=this.value;saveDraft()">${setData[idx].notes}</textarea>
         </div>
         ${ytHtml}
       </div>`;
@@ -783,6 +852,7 @@ function toggleSetDone(exIdx, setIdx) {
   const v = getVariant();
   const ex = WORKOUTS[currentWorkout].variants[v][exIdx];
   if (setData[exIdx].sets[setIdx].done) startRestTimer(ex.rest);
+  saveDraft();
   // re-render just that button
   const rows = document.querySelectorAll(`#sa-${exIdx} .set-row`);
   if (rows[setIdx]) {
@@ -815,6 +885,7 @@ function toggleExercise(idx) {
   }
   const v = getVariant();
   updateProgress(WORKOUTS[currentWorkout].variants[v].length);
+  saveDraft();
 }
 
 function updateProgress(total) {
@@ -959,10 +1030,11 @@ async function saveWorkout() {
   // Stop workout timer
   if (workoutStartTime) toggleWorkoutTimer();
 
-  // Reset
+  // Reset & clear draft
   completedExercises = new Set();
   setData = {};
   document.getElementById('workoutNotes').value = '';
+  clearDraft();
   loadWorkout();
 }
 
@@ -1231,11 +1303,98 @@ function showToast(msg, type='') {
 }
 
 // ═══════════════════════════════════════════════
+//  DRAFT (auto-save to localStorage)
+// ═══════════════════════════════════════════════
+const DRAFT_KEY = 'ironlog_draft';
+
+function saveDraft() {
+  const draft = {
+    workout: currentWorkout,
+    week: currentWeek,
+    variant: manualVariant,
+    setData,
+    completed: [...completedExercises],
+    notes: document.getElementById('workoutNotes').value,
+    savedAt: Date.now()
+  };
+  localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+}
+
+function loadDraftIfExists() {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return;
+    const draft = JSON.parse(raw);
+    // Only show if less than 24h old
+    if (Date.now() - draft.savedAt > 86400000) { clearDraft(); return; }
+    document.getElementById('draftBanner').classList.add('visible');
+  } catch(e) { clearDraft(); }
+}
+
+function restoreDraft() {
+  try {
+    const draft = JSON.parse(localStorage.getItem(DRAFT_KEY));
+    currentWorkout = draft.workout;
+    currentWeek = draft.week;
+    manualVariant = draft.variant;
+    setData = draft.setData;
+    completedExercises = new Set(draft.completed || []);
+    document.getElementById('workoutNotes').value = draft.notes || '';
+    ['A','B','C'].forEach(k => {
+      const b = document.getElementById('btn'+k);
+      b.classList.toggle('active', k===currentWorkout);
+    });
+    updateVariantUI();
+    renderExercises(WORKOUTS[currentWorkout].variants[getVariant()]);
+    updateProgress(WORKOUTS[currentWorkout].variants[getVariant()].length);
+    document.getElementById('draftBanner').classList.remove('visible');
+    showToast('✓ Тренировка восстановлена', 'ok');
+  } catch(e) { clearDraft(); }
+}
+
+function discardDraft() {
+  clearDraft();
+  document.getElementById('draftBanner').classList.remove('visible');
+  showToast('Черновик удалён');
+}
+
+function clearDraft() {
+  localStorage.removeItem(DRAFT_KEY);
+}
+
+// ═══════════════════════════════════════════════
+//  TECH MODAL
+// ═══════════════════════════════════════════════
+function openTechModal(idx) {
+  const v = getVariant();
+  const ex = WORKOUTS[currentWorkout].variants[v][idx];
+  document.getElementById('modalTitle').textContent = ex.name;
+  const tipsEl = document.getElementById('modalTips');
+  const mistakesEl = document.getElementById('modalMistakes');
+  tipsEl.innerHTML = (ex.tips||[]).map(t=>`<li>${t}</li>`).join('');
+  mistakesEl.innerHTML = (ex.mistakes||[]).map(m=>`<li>${m}</li>`).join('');
+  const ytWrap = document.getElementById('modalYtWrap');
+  ytWrap.innerHTML = ex.yt ? `<a class="modal-yt" href="${ex.yt}" target="_blank">▶ Смотреть технику на YouTube</a>` : '';
+  document.getElementById('techModal').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeTechModal(e) {
+  if (e.target === document.getElementById('techModal')) closeTechModalDirect();
+}
+
+function closeTechModalDirect() {
+  document.getElementById('techModal').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+// ═══════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════
 renderHome();
 renderPrinciples();
 loadWorkout();
+loadDraftIfExists();
 loadFromGitHub();
 </script>
 </body>
