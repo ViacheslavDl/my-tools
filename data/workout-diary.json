@@ -1,5 +1,126 @@
 [
   {
+    "date": "25.03.2026",
+    "dateISO": "2026-03-25",
+    "week": 1,
+    "workout": "A",
+    "variant": 0,
+    "title": "ТРЕНИРОВКА A",
+    "duration": 57939,
+    "completed": 5,
+    "total": 5,
+    "completionPct": 100,
+    "tonnage": 2152,
+    "notes": "",
+    "exercises": [
+      {
+        "name": "Приседания со штангой",
+        "sets": [
+          {
+            "weight": "20",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "20",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "20",
+            "reps": "10",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Жим штанги лёжа",
+        "sets": [
+          {
+            "weight": "20",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "20",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "20",
+            "reps": "10",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Тяга штанги в наклоне",
+        "sets": [
+          {
+            "weight": "20",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "20",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "20",
+            "reps": "12",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Жим гантелей сидя",
+        "sets": [
+          {
+            "weight": "8",
+            "reps": "9",
+            "done": true
+          },
+          {
+            "weight": "8",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "8",
+            "reps": "10",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Планка",
+        "sets": [
+          {
+            "weight": "",
+            "reps": "60 сек",
+            "done": true
+          },
+          {
+            "weight": "",
+            "reps": "60 сек",
+            "done": true
+          },
+          {
+            "weight": "",
+            "reps": "60 сек",
+            "done": true
+          }
+        ],
+        "notes": ""
+      }
+    ]
+  },
+  {
     "date": "22.03.2026",
     "dateISO": "2026-03-22",
     "week": 1,
