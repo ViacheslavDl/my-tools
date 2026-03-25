@@ -1,8 +1,8 @@
 {
-  "sessions": 1,
-  "tonnage": 2340,
-  "streak": 1,
-  "lastDate": "Sun Mar 22 2026",
+  "sessions": 2,
+  "tonnage": 4492,
+  "streak": 2,
+  "lastDate": "Wed Mar 25 2026",
   "PRs": {
     "Приседания со штангой": {
       "weight": 20,
@@ -27,13 +27,25 @@
     "Выпады с гантелями": {
       "weight": 9,
       "date": "22.03.2026"
+    },
+    "Жим штанги лёжа": {
+      "weight": 20,
+      "date": "25.03.2026"
+    },
+    "Тяга штанги в наклоне": {
+      "weight": 20,
+      "date": "25.03.2026"
+    },
+    "Жим гантелей сидя": {
+      "weight": 8,
+      "date": "25.03.2026"
     }
   },
   "weeks": {
     "w1": {
-      "tonnage": 2340,
-      "sessions": 1,
-      "completionTotal": 100
+      "tonnage": 4492,
+      "sessions": 2,
+      "completionTotal": 200
     }
   }
 }
