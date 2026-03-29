@@ -1,5 +1,168 @@
 [
   {
+    "date": "29.03.2026",
+    "dateISO": "2026-03-29",
+    "week": 1,
+    "workout": "C",
+    "variant": 0,
+    "title": "ТРЕНИРОВКА C",
+    "duration": 73415,
+    "completed": 7,
+    "total": 7,
+    "completionPct": 100,
+    "tonnage": 2565,
+    "notes": "В этот раз было все нормально, понял что не нужно гнаться сразу за весами большими, прорабатываю технику.",
+    "exercises": [
+      {
+        "name": "Приседания со штангой",
+        "sets": [
+          {
+            "weight": "20",
+            "reps": "11",
+            "done": true
+          },
+          {
+            "weight": "20",
+            "reps": "11",
+            "done": true
+          },
+          {
+            "weight": "20",
+            "reps": "11",
+            "done": true
+          },
+          {
+            "weight": "20",
+            "reps": "11",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Жим гантелей наклонная",
+        "sets": [
+          {
+            "weight": "7.5",
+            "reps": "11",
+            "done": true
+          },
+          {
+            "weight": "7.5",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "7.5",
+            "reps": "12",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Тяга гантели одной рукой",
+        "sets": [
+          {
+            "weight": "10",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "10",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "10",
+            "reps": "12",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Армейский жим стоя",
+        "sets": [
+          {
+            "weight": "20",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "20",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "20",
+            "reps": "10",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Разведения гантелей в стороны",
+        "sets": [
+          {
+            "weight": "6",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "5",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "5",
+            "reps": "12",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Выпады с гантелями",
+        "sets": [
+          {
+            "weight": "9",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "9",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "9",
+            "reps": "10",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Планка",
+        "sets": [
+          {
+            "weight": "",
+            "reps": "40 сек",
+            "done": true
+          },
+          {
+            "weight": "",
+            "reps": "40 сек",
+            "done": true
+          }
+        ],
+        "notes": ""
+      }
+    ]
+  },
+  {
     "date": "27.03.2026",
     "dateISO": "2026-03-27",
     "week": 1,
