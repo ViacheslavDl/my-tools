@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": 1775295833615,
+    "name": "Тренировка",
+    "desc": "",
+    "cat": "Здоровье",
+    "emoji": "💪",
+    "color": "#ff5c7c",
+    "file": "tools/workout-plan-1.html",
+    "url": "https://ViacheslavDl.github.io/my-tools/tools/workout-plan-1.html",
+    "added": "04.04.2026"
+  }
+]
