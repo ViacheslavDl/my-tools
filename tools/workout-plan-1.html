@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slavik — Тренировки</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0c0c0e;--surface:#141416;--surface2:#1c1c20;--surface3:#242428;
+  --border:#2a2a30;--border2:#363640;
+  --accent:#e8f55a;--accent2:#ff8c42;--accent3:#5af5c8;--accent4:#a78bfa;--accent5:#f55a8a;
+  --text:#f2f0eb;--text2:#a0a0b0;--text3:#606070;
+  --red:#ff5555;--done-bg:#1a2a0e;--done-border:#4a8020;
+  --radius:10px;
+  --font-display:'Bebas Neue',sans-serif;
+  --font-mono:'Space Mono',monospace;
+  --font-body:'Manrope',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;padding-bottom:120px;font-size:14px}
+
+/* HEADER */
+header{background:linear-gradient(180deg,#16161a,#0c0c0e);border-bottom:1px solid var(--border);padding:14px 16px 0}
+.hdr-sticky{position:sticky;top:0;z-index:200;background:linear-gradient(180deg,#16161a,#0c0c0e);border-bottom:1px solid var(--border);padding:0 16px}
+.hdr-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.logo{font-family:var(--font-display);font-size:2rem;letter-spacing:3px;line-height:1}
+.logo em{color:var(--accent);font-style:normal}
+.logo span{color:var(--text2)}
+.hdr-meta{font-family:var(--font-mono);font-size:0.6rem;color:var(--text3);line-height:1.7;flex:1}
+.hdr-meta b{color:var(--accent2)}
+.sync-status{display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:0.6rem;padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;transition:all .2s;margin-left:auto;white-space:nowrap}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--text3)}
+.sync-status.ok .sync-dot{background:var(--accent3);box-shadow:0 0 6px var(--accent3)}
+.sync-status.err .sync-dot{background:var(--red)}
+.sync-status.loading .sync-dot{background:var(--accent2);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* SPINE WARNING BANNER */
+.spine-banner{background:rgba(245,90,138,.08);border:1px solid var(--accent5);border-radius:var(--radius);padding:10px 14px;margin-bottom:12px;font-size:0.8rem;color:var(--text2);line-height:1.6}
+.spine-banner b{color:var(--accent5)}
+
+/* STATS */
+.stats-row{display:flex;gap:8px;padding:10px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.stats-row::-webkit-scrollbar{display:none}
+.stat-pill{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 12px;display:flex;flex-direction:column;gap:2px;flex-shrink:0}
+.stat-v{font-family:var(--font-display);font-size:1.3rem;color:var(--accent);letter-spacing:1px;line-height:1}
+.stat-l{font-family:var(--font-mono);font-size:0.58rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+
+/* NAV */
+.nav{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;padding:10px 14px;color:var(--text3);font-family:var(--font-mono);font-size:0.65rem;cursor:pointer;transition:all .2s;white-space:nowrap;letter-spacing:1px}
+.nav-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.nav-btn:hover:not(.active){color:var(--text)}
+
+main{padding:14px 16px;max-width:860px;margin:0 auto}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* SECTION HEADER */
+.sh{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.sh-title{font-family:var(--font-display);font-size:1.5rem;letter-spacing:2px}
+.badge{font-family:var(--font-mono);font-size:0.58rem;padding:2px 8px;border-radius:3px;font-weight:700;letter-spacing:1px}
+.badge-green{background:var(--accent);color:#000}
+.badge-orange{background:var(--accent2);color:#000}
+.badge-purple{background:var(--accent4);color:#fff}
+.badge-pink{background:var(--accent5);color:#fff}
+.badge-teal{background:var(--accent3);color:#000}
+
+.note-box{background:var(--surface);border-left:3px solid var(--accent2);border-radius:0 var(--radius) var(--radius) 0;padding:10px 14px;margin-bottom:12px;font-size:0.82rem;color:var(--text2);line-height:1.6}
+.note-box b{color:var(--accent2)}
+.note-box.pink{border-left-color:var(--accent5)}.note-box.pink b{color:var(--accent5)}
+.note-box.teal{border-left-color:var(--accent3)}.note-box.teal b{color:var(--accent3)}
+
+/* WORKOUT TYPE SELECTOR */
+.wtype-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.wtype-btn{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 12px;cursor:pointer;transition:all .2s;text-align:left}
+.wtype-btn.active{border-color:var(--accent);background:rgba(232,245,90,.06)}
+.wtype-btn.active.back{border-color:var(--accent5);background:rgba(245,90,138,.06)}
+.wtype-icon{font-size:1.4rem;margin-bottom:6px}
+.wtype-name{font-family:var(--font-display);font-size:1rem;letter-spacing:1px;color:var(--text);margin-bottom:2px}
+.wtype-btn.active .wtype-name{color:var(--accent)}
+.wtype-btn.active.back .wtype-name{color:var(--accent5)}
+.wtype-desc{font-family:var(--font-mono);font-size:0.6rem;color:var(--text3);line-height:1.5}
+
+/* WORKOUT CONTROLS */
+.workout-controls{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.wk-btn{flex:1;min-width:60px;padding:9px 6px;border:1px solid var(--border);border-radius:6px;background:var(--surface2);color:var(--text3);font-family:var(--font-display);font-size:1rem;letter-spacing:2px;cursor:pointer;transition:all .2s;text-align:center}
+.wk-btn.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.wk-btn.active.back{background:var(--accent5);border-color:var(--accent5)}
+
+.week-switcher{display:flex;align-items:center;gap:8px;margin-bottom:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px}
+.ws-label{font-family:var(--font-mono);font-size:0.65rem;color:var(--text3);flex:1}
+.ws-label b{color:var(--accent);font-size:0.82rem}
+.ws-label span{color:var(--accent2)}
+.ws-btn{background:var(--surface2);border:1px solid var(--border);border-radius:5px;color:var(--text2);padding:5px 10px;cursor:pointer;font-family:var(--font-mono);font-size:0.65rem;transition:all .2s;white-space:nowrap}
+.ws-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* PROGRESS — fixed bottom */
+.progress-wrap{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:7px 16px;z-index:290}
+.pw-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.pw-label{font-family:var(--font-mono);font-size:0.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.pw-val{font-family:var(--font-display);font-size:0.95rem;color:var(--accent);letter-spacing:1px}
+.prog-outer{height:5px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.prog-inner{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:3px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+.prog-inner.back-mode{background:linear-gradient(90deg,var(--accent5),var(--accent4))}
+
+/* REST TIMER — fixed */
+.timer-bar{display:none;position:fixed;bottom:56px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:828px;background:var(--surface);border:1px solid var(--accent2);border-radius:var(--radius);padding:11px 14px;align-items:center;gap:12px;z-index:300;box-shadow:0 -4px 24px rgba(0,0,0,.7)}
+.timer-bar.visible{display:flex}
+.tb-label{font-family:var(--font-mono);font-size:0.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.tb-time{font-family:var(--font-display);font-size:1.8rem;color:var(--accent2);letter-spacing:2px;flex:1}
+.tb-close{background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text3);padding:4px 10px;cursor:pointer;font-family:var(--font-mono);font-size:0.62rem;transition:all .2s}
+.tb-close:hover{border-color:var(--red);color:var(--red)}
+
+/* WORKOUT TIMER */
+.workout-timer{display:none;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:9px 14px;margin-bottom:12px}
+.workout-timer.visible{display:flex}
+.wt-label{font-family:var(--font-mono);font-size:0.58rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.wt-time{font-family:var(--font-display);font-size:1.1rem;color:var(--accent3);letter-spacing:2px}
+.start-btn{display:block;width:100%;padding:12px;background:var(--accent);color:#000;font-family:var(--font-display);font-size:1rem;letter-spacing:3px;border:none;border-radius:var(--radius);cursor:pointer;transition:all .2s;margin-bottom:12px}
+.start-btn:hover{opacity:.85}
+.start-btn.active{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+.start-btn.back-mode{background:var(--accent5)}
+
+/* DRAFT BANNER */
+.draft-banner{display:none;background:rgba(255,140,66,.1);border:1px solid var(--accent2);border-radius:var(--radius);padding:10px 14px;margin-bottom:12px;font-family:var(--font-mono);font-size:0.7rem;color:var(--accent2);align-items:center;gap:8px;flex-wrap:wrap}
+.draft-banner.visible{display:flex}
+.draft-restore{background:var(--accent2);color:#000;border:none;border-radius:4px;padding:5px 12px;font-family:var(--font-mono);font-size:0.66rem;cursor:pointer;font-weight:700}
+.draft-discard{background:none;border:1px solid var(--border2);border-radius:4px;padding:5px 10px;font-family:var(--font-mono);font-size:0.66rem;color:var(--text3);cursor:pointer}
+
+/* EXERCISE CARD */
+.ex-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;transition:border-color .2s}
+.ex-card.done{background:var(--done-bg);border-color:var(--done-border)}
+.ex-card.done .ex-card-header{border-bottom-color:#2a4010}
+.ex-card.rehab{border-left:3px solid var(--accent5)}
+.ex-card-header{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--border);user-select:none}
+.ex-n{font-family:var(--font-display);font-size:1.2rem;color:var(--text3);width:24px;flex-shrink:0;line-height:1}
+.ex-main{flex:1;min-width:0}
+.ex-name-row{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.ex-name{font-weight:700;font-size:0.9rem;color:var(--text)}
+.tip-btn{background:none;border:1px solid var(--border2);border-radius:50%;width:20px;height:20px;color:var(--text3);font-family:var(--font-mono);font-size:0.6rem;cursor:pointer;flex-shrink:0;transition:all .2s;display:inline-flex;align-items:center;justify-content:center}
+.tip-btn:hover{border-color:var(--accent3);color:var(--accent3)}
+.ex-tags{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.tag{font-family:var(--font-mono);font-size:0.58rem;padding:2px 6px;border-radius:3px;letter-spacing:.4px}
+.tag-muscle{background:rgba(90,245,200,.1);color:var(--accent3)}
+.tag-sets{background:var(--surface3);color:var(--text2)}
+.tag-weight{background:rgba(255,140,66,.12);color:var(--accent2)}
+.tag-pr{background:rgba(167,139,250,.15);color:var(--accent4)}
+.tag-alt{background:rgba(232,245,90,.1);color:var(--accent)}
+.tag-rehab{background:rgba(245,90,138,.12);color:var(--accent5)}
+.tag-noweight{background:rgba(90,245,200,.08);color:var(--accent3)}
+.ex-check{background:none;border:2px solid var(--border2);border-radius:50%;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.85rem;transition:all .2s;flex-shrink:0;color:var(--text3)}
+.ex-card.done .ex-check{background:var(--accent);border-color:var(--accent);color:#000}
+
+/* LAST SESSION */
+.last-session{background:var(--surface2);border-bottom:1px solid var(--border);padding:7px 14px;font-family:var(--font-mono);font-size:0.63rem;color:var(--text3);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.ls-data{color:var(--text2)}
+.ls-suggest{color:var(--accent);margin-left:auto}
+.ls-pr{color:var(--accent4)}
+
+/* SETS */
+.sets-area{padding:11px 14px}
+.sets-grid-header{display:grid;grid-template-columns:26px 1fr 1fr 68px;gap:6px;margin-bottom:6px;padding:0 2px}
+.sgh-cell{font-family:var(--font-mono);font-size:0.58rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;text-align:center}
+.sgh-cell:first-child{text-align:left}
+.set-row{display:grid;grid-template-columns:26px 1fr 1fr 68px;gap:6px;margin-bottom:5px;align-items:center}
+.set-num{font-family:var(--font-mono);font-size:0.7rem;color:var(--text3);text-align:center}
+.set-inp{background:var(--surface2);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:var(--font-mono);font-size:0.83rem;padding:6px 5px;text-align:center;width:100%;transition:border-color .2s;-moz-appearance:textfield}
+.set-inp::-webkit-outer-spin-button,.set-inp::-webkit-inner-spin-button{-webkit-appearance:none}
+.set-inp:focus{outline:none;border-color:var(--accent)}
+.set-inp:disabled{opacity:.35;cursor:not-allowed}
+.set-done{background:var(--surface2);border:1px solid var(--border);border-radius:5px;color:var(--text3);font-family:var(--font-mono);font-size:0.63rem;padding:6px 3px;cursor:pointer;transition:all .2s;width:100%;letter-spacing:.3px}
+.set-done.ok{background:var(--accent);color:#000;border-color:var(--accent);font-weight:700}
+
+/* DURATION FIELD (for rehab / timed exercises) */
+.duration-row{display:grid;grid-template-columns:26px 1fr 68px;gap:6px;margin-bottom:5px;align-items:center}
+
+.ex-notes-wrap{margin-top:8px}
+.ex-notes-label{font-family:var(--font-mono);font-size:0.58rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.ex-notes{background:var(--surface2);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:var(--font-body);font-size:0.78rem;padding:7px 10px;width:100%;resize:vertical;min-height:44px}
+.ex-notes:focus{outline:none;border-color:var(--accent2)}
+.yt-btn{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:0.6rem;color:var(--accent2);text-decoration:none;margin-top:6px;opacity:.7;transition:opacity .2s}
+.yt-btn:hover{opacity:1}
+
+/* WORKOUT NOTES */
+.workout-notes-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-top:4px}
+.workout-notes-label{font-family:var(--font-mono);font-size:0.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.workout-notes{background:var(--surface2);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:var(--font-body);font-size:0.82rem;padding:9px 11px;width:100%;resize:vertical;min-height:64px}
+.workout-notes:focus{outline:none;border-color:var(--accent)}
+.belt-reminder{background:rgba(245,90,138,.08);border:1px solid var(--accent5);border-radius:6px;padding:8px 12px;font-family:var(--font-mono);font-size:0.65rem;color:var(--accent5);margin-bottom:10px}
+
+.save-btn{display:block;width:100%;padding:13px;background:var(--accent);color:#000;font-family:var(--font-display);font-size:1.1rem;letter-spacing:3px;border:none;border-radius:var(--radius);cursor:pointer;margin-top:12px;transition:opacity .2s}
+.save-btn:hover{opacity:.85}
+.save-btn:disabled{opacity:.4;cursor:not-allowed}
+.save-btn.back-mode{background:var(--accent5)}
+
+/* WEEK GRID */
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:14px}
+.wday{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 2px;text-align:center}
+.wday.gym{border-color:var(--accent)}
+.wday.gym-back{border-color:var(--accent5)}
+.wday.off{opacity:.4}
+.wday-name{font-family:var(--font-mono);font-size:0.52rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.wday-val{font-family:var(--font-display);font-size:0.75rem;letter-spacing:1px}
+.wday.gym .wday-val{color:var(--accent)}
+.wday.gym-back .wday-val{color:var(--accent5)}
+
+/* HOME */
+.home-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px 13px;margin-bottom:8px;display:flex;gap:11px;align-items:flex-start}
+.home-icon{font-size:1.4rem;width:34px;text-align:center;flex-shrink:0;margin-top:2px}
+.home-name{font-weight:700;font-size:0.88rem;margin-bottom:2px}
+.home-meta{font-family:var(--font-mono);font-size:0.63rem;color:var(--text3);margin-bottom:3px}
+.home-tip{font-size:0.76rem;color:var(--accent3)}
+
+/* DIARY */
+.diary-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:10px}
+.diary-card.is-back{border-left:3px solid var(--accent5)}
+.dc-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.dc-date{font-family:var(--font-mono);font-size:0.62rem;color:var(--text3)}
+.dc-wname{font-family:var(--font-display);font-size:1rem;color:var(--accent);letter-spacing:1px;flex:1}
+.diary-card.is-back .dc-wname{color:var(--accent5)}
+.dc-meta{font-family:var(--font-mono);font-size:0.6rem;color:var(--text2)}
+.dc-list{list-style:none}
+.dc-list li{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:0.78rem;gap:8px}
+.dc-list li:last-child{border-bottom:none}
+.dc-result{color:var(--accent);font-family:var(--font-mono);font-size:0.68rem;flex-shrink:0}
+.dc-note{margin-top:7px;padding:7px 10px;background:var(--surface2);border-radius:5px;font-size:0.76rem;color:var(--text3);font-style:italic}
+.empty-state{text-align:center;padding:48px 20px;color:var(--text3);font-family:var(--font-mono);font-size:0.76rem;line-height:2}
+.empty-state .big{font-size:2.5rem;display:block;margin-bottom:12px}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+@media(max-width:480px){.stats-grid{grid-template-columns:1fr}}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px}
+.sc-label{font-family:var(--font-mono);font-size:0.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.sc-value{font-family:var(--font-display);font-size:1.8rem;color:var(--accent);letter-spacing:2px;line-height:1;margin-bottom:2px}
+.sc-sub{font-family:var(--font-mono);font-size:0.6rem;color:var(--text3)}
+.chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px;margin-bottom:10px}
+.chart-title{font-family:var(--font-mono);font-size:0.63rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.chart-title select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--font-mono);font-size:0.62rem;padding:3px 7px;border-radius:4px;cursor:pointer}
+canvas{width:100%!important;display:block}
+.pr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:7px;margin-bottom:14px}
+.pr-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.pr-name{font-size:0.76rem;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pr-val{font-family:var(--font-display);font-size:1.5rem;color:var(--accent4);letter-spacing:1px;line-height:1}
+.pr-date{font-family:var(--font-mono);font-size:0.56rem;color:var(--text3);margin-top:2px}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:600;align-items:flex-end;justify-content:center}
+.modal-overlay.visible{display:flex}
+.modal-box{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius) var(--radius) 0 0;padding:18px 16px 36px;width:100%;max-width:860px;max-height:88vh;overflow-y:auto}
+.modal-top{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.modal-title{font-family:var(--font-display);font-size:1.2rem;letter-spacing:1px;flex:1}
+.modal-close{background:none;border:1px solid var(--border2);border-radius:5px;color:var(--text3);padding:5px 12px;cursor:pointer;font-family:var(--font-mono);font-size:0.68rem}
+.modal-section{margin-bottom:12px}
+.modal-section-label{font-family:var(--font-mono);font-size:0.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+.modal-tips{list-style:none}
+.modal-tips li{padding:5px 0;border-bottom:1px solid var(--border);font-size:0.83rem;display:flex;gap:8px}
+.modal-tips li:last-child{border-bottom:none}
+.modal-tips li::before{content:'✓';color:var(--accent3);flex-shrink:0}
+.modal-mistakes{list-style:none}
+.modal-mistakes li{padding:5px 0;border-bottom:1px solid var(--border);font-size:0.83rem;color:var(--text2);display:flex;gap:8px}
+.modal-mistakes li:last-child{border-bottom:none}
+.modal-mistakes li::before{content:'✗';color:var(--red);flex-shrink:0}
+.modal-yt{display:inline-flex;align-items:center;gap:6px;background:rgba(255,140,66,.1);border:1px solid var(--accent2);border-radius:6px;padding:8px 14px;color:var(--accent2);text-decoration:none;font-family:var(--font-mono);font-size:0.7rem;margin-top:4px}
+
+/* PRINCIPLES */
+.princ-card{background:var(--surface);border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:11px 13px;margin-bottom:8px}
+.princ-n{font-family:var(--font-display);font-size:0.95rem;color:var(--accent);margin-bottom:3px;letter-spacing:1px}
+.princ-title{font-weight:700;margin-bottom:3px;font-size:0.88rem}
+.princ-text{font-size:0.8rem;color:var(--text2);line-height:1.65}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:9px 18px;font-family:var(--font-mono);font-size:0.72rem;color:var(--text);opacity:0;transition:all .3s;z-index:700;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--accent3);color:var(--accent3)}
+.toast.err{border-color:var(--red);color:var(--red)}
+
+@media(max-width:480px){
+  .sets-grid-header,.set-row{grid-template-columns:22px 1fr 1fr 58px}
+  .logo{font-size:1.6rem}
+  .pr-grid{grid-template-columns:1fr 1fr}
+  .wtype-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-top">
+    <div class="logo"><em>IRON</em><span>LOG</span></div>
+    <div class="hdr-meta">Slavik · 187 см · 59 кг<br>Цель: <b>Набор массы</b> · Спина: без осевой нагрузки</div>
+    <div class="sync-status" id="syncStatus" onclick="manualSync()">
+      <div class="sync-dot"></div><span id="syncLabel">—</span>
+    </div>
+  </div>
+</header>
+
+<div class="hdr-sticky">
+  <div class="stats-row">
+    <div class="stat-pill"><div class="stat-v" id="statWeek">1</div><div class="stat-l">Неделя</div></div>
+    <div class="stat-pill"><div class="stat-v" id="statSessions">0</div><div class="stat-l">Всего</div></div>
+    <div class="stat-pill"><div class="stat-v" id="statTonnage">0</div><div class="stat-l">Тоннаж кг</div></div>
+    <div class="stat-pill"><div class="stat-v" id="statStreak">0</div><div class="stat-l">🔥 Серия</div></div>
+    <div class="stat-pill"><div class="stat-v" id="statPRs">0</div><div class="stat-l">Рекордов</div></div>
+  </div>
+  <div class="nav">
+    <button class="nav-btn active" onclick="switchTab('workouts',this)">ТРЕНИРОВКА</button>
+    <button class="nav-btn" onclick="switchTab('home',this)">🏠 ДОМА</button>
+    <button class="nav-btn" onclick="switchTab('diary',this)">ДНЕВНИК</button>
+    <button class="nav-btn" onclick="switchTab('stats',this)">СТАТИСТИКА</button>
+    <button class="nav-btn" onclick="switchTab('principles',this)">БАЗА</button>
+  </div>
+</div>
+
+<main>
+
+<!-- WORKOUTS -->
+<div class="tab-panel active" id="tab-workouts">
+
+  <div class="draft-banner" id="draftBanner">
+    <span>📋 Незавершённая тренировка</span>
+    <button class="draft-restore" onclick="restoreDraft()">Восстановить</button>
+    <button class="draft-discard" onclick="discardDraft()">Удалить</button>
+  </div>
+
+  <div class="spine-banner">
+    <b>⚠️ Рекомендация врача:</b> не давать нагрузку на поясницу, увеличивать веса очень плавно, носить пояс на рабочих подходах. Все упражнения с осевой нагрузкой заменены.
+  </div>
+
+  <div class="wtype-grid">
+    <button class="wtype-btn active" id="wtMain" onclick="selectWorkoutType('main')">
+      <div class="wtype-icon">💪</div>
+      <div class="wtype-name">Основная</div>
+      <div class="wtype-desc">Грудь, ноги, плечи,<br>руки — без нагрузки<br>на позвоночник</div>
+    </button>
+    <button class="wtype-btn back" id="wtBack" onclick="selectWorkoutType('back')">
+      <div class="wtype-icon">🦴</div>
+      <div class="wtype-name">Спина</div>
+      <div class="wtype-desc">Мышцы вокруг<br>позвоночника,<br>реабилитация</div>
+    </button>
+  </div>
+
+  <div class="week-grid" id="weekGrid"></div>
+
+  <div class="workout-controls" id="workoutControls"></div>
+
+  <div class="week-switcher">
+    <div class="ws-label"><b id="wsWeekNum">Неделя 1</b> &nbsp;·&nbsp; <span id="wsVariant">Вариант А (авто)</span></div>
+    <button class="ws-btn" onclick="prevWeek()">← пред</button>
+    <button class="ws-btn" onclick="nextWeek()">след →</button>
+    <button class="ws-btn" onclick="toggleVariant()" id="variantBtn">Вариант Б</button>
+  </div>
+
+  <div class="sh">
+    <div class="sh-title" id="workoutTitle">ТРЕНИРОВКА A</div>
+    <div class="badge badge-green" id="workoutBadge">Среда</div>
+  </div>
+  <div class="note-box" id="workoutNote"></div>
+
+  <div class="belt-reminder">🪖 Надень пояс перед рабочими подходами</div>
+
+  <button class="start-btn" id="startBtn" onclick="toggleWorkoutTimer()">▶ НАЧАТЬ ТРЕНИРОВКУ</button>
+  <div class="workout-timer" id="workoutTimerBar">
+    <div>⏱</div>
+    <div style="flex:1">
+      <div class="wt-label">Длительность</div>
+      <div class="wt-time" id="workoutTimeDisplay">00:00</div>
+    </div>
+  </div>
+
+  <div class="timer-bar" id="restTimerBar">
+    <div><div class="tb-label">Отдых</div><div class="tb-time" id="restTimeDisplay">2:00</div></div>
+    <button class="tb-close" onclick="stopRestTimer()">Пропустить ✕</button>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="pw-top">
+      <div class="pw-label">Прогресс</div>
+      <div class="pw-val" id="progressText">0 / 0</div>
+    </div>
+    <div class="prog-outer"><div class="prog-inner" id="progressBar" style="width:0%"></div></div>
+  </div>
+
+  <div id="exerciseList"></div>
+
+  <div class="workout-notes-wrap">
+    <div class="workout-notes-label">Заметки к тренировке</div>
+    <textarea class="workout-notes" id="workoutNotes" placeholder="Как прошло? Самочувствие спины? Что ощущал?..."></textarea>
+  </div>
+
+  <button class="save-btn" id="saveBtn" onclick="saveWorkout()">💾 СОХРАНИТЬ В ДНЕВНИК</button>
+</div>
+
+<!-- HOME -->
+<div class="tab-panel" id="tab-home">
+  <div class="sh"><div class="sh-title">ДОМА</div><div class="badge badge-teal">Без зала</div></div>
+  <div class="note-box teal"><b>🏠 Гантели ~5–7 кг</b> (с блинами). Все упражнения безопасны для спины.</div>
+  <div id="homeList"></div>
+</div>
+
+<!-- DIARY -->
+<div class="tab-panel" id="tab-diary">
+  <div class="sh"><div class="sh-title">ДНЕВНИК</div><div class="badge badge-orange">История</div></div>
+  <div id="diaryList"></div>
+</div>
+
+<!-- STATS -->
+<div class="tab-panel" id="tab-stats">
+  <div class="sh"><div class="sh-title">СТАТИСТИКА</div><div class="badge badge-purple">Графики</div></div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="sc-label">Всего тренировок</div><div class="sc-value" id="sc1">0</div><div class="sc-sub">с начала</div></div>
+    <div class="stat-card"><div class="sc-label">Общий тоннаж</div><div class="sc-value" id="sc2">0</div><div class="sc-sub">кг поднято</div></div>
+    <div class="stat-card"><div class="sc-label">Лучшая неделя</div><div class="sc-value" id="sc3">—</div><div class="sc-sub">тоннаж</div></div>
+    <div class="stat-card"><div class="sc-label">Рекордов</div><div class="sc-value" id="sc4">0</div><div class="sc-sub">личных</div></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">Тоннаж по неделям (кг)</div><canvas id="chartTonnage" height="150"></canvas></div>
+  <div class="chart-wrap"><div class="chart-title">Тренировок в неделю</div><canvas id="chartSessions" height="120"></canvas></div>
+  <div class="chart-wrap">
+    <div class="chart-title">Прогресс веса <select id="exerciseSelect" onchange="renderExerciseChart()"><option value="">— выбери упражнение —</option></select></div>
+    <canvas id="chartExercise" height="140"></canvas>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">Выполнение тренировок (%)</div><canvas id="chartCompletion" height="120"></canvas></div>
+  <div class="sh" style="margin-top:18px"><div class="sh-title">РЕКОРДЫ</div><div class="badge badge-purple">PR</div></div>
+  <div id="prList"></div>
+</div>
+
+<!-- PRINCIPLES -->
+<div class="tab-panel" id="tab-principles">
+  <div class="sh"><div class="sh-title">БАЗА</div><div class="badge badge-green">Принципы</div></div>
+  <div id="principlesList"></div>
+</div>
+
+</main>
+
+<!-- TECH MODAL -->
+<div class="modal-overlay" id="techModal" onclick="closeTechModal(event)">
+  <div class="modal-box">
+    <div class="modal-top">
+      <div class="modal-title" id="modalTitle">Техника</div>
+      <button class="modal-close" onclick="closeTechModalDirect()">✕ закрыть</button>
+    </div>
+    <div class="modal-section"><div class="modal-section-label">✓ Как делать</div><ul class="modal-tips" id="modalTips"></ul></div>
+    <div class="modal-section"><div class="modal-section-label">✗ Частые ошибки</div><ul class="modal-mistakes" id="modalMistakes"></ul></div>
+    <div id="modalYtWrap"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  DATA — MAIN WORKOUTS (spine-safe, no axial load)
+// ═══════════════════════════════════════════════════════
+const MAIN_WORKOUTS = {
+  A: {
+    title:'ТРЕНИРОВКА A', badge:'Среда · ~50 мин', badgeClass:'badge-green',
+    note:'<b>⚡ Среда после смены</b> — облегчённый вариант. Без нагрузки на спину. Просто зайди и сделай.',
+    variants:[
+      [
+        {name:'Жим штанги лёжа', muscles:'Грудь, трицепс', sets:3, reps:'8', sw:'20', rest:180, yt:'https://www.youtube.com/results?search_query=жим+лёжа+техника+начинающих', tips:['Лопатки сведены и прижаты к скамье','Хват чуть шире плеч','Опускай гриф к нижней части груди','Ноги на полу, лёгкий прогиб поясницы','Жми вверх и чуть назад'], mistakes:['Отрыв ягодиц от скамьи','Гриф к шее','Неполная амплитуда']},
+        {name:'Жим ногами в тренажёре', muscles:'Ноги, ягодицы', sets:3, reps:'10', sw:'50', rest:150, yt:'https://www.youtube.com/results?search_query=жим+ногами+тренажёр+техника', tips:['Ноги на ширине плеч, середина платформы','Опускай до угла 90° в колене','Поясница прижата к спинке — всегда!','Жми пятками, не носками','Колени не своди внутрь'], mistakes:['Отрыв поясницы от спинки!','Неполная амплитуда','Блокировка коленей вверху']},
+        {name:'Тяга верхнего блока к груди', muscles:'Спина, бицепс', sets:3, reps:'10', sw:'30', rest:150, yt:'https://www.youtube.com/results?search_query=тяга+верхнего+блока+техника', tips:['Хват чуть шире плеч','Слегка откинь корпус назад','Тяни к верхней части груди','Локти идут вниз и назад','Лопатки сводятся внизу'], mistakes:['Сильный наклон назад','Тяга к животу','Рывки корпусом']},
+        {name:'Жим гантелей сидя (с опорой)', muscles:'Плечи', sets:3, reps:'10', sw:'8', rest:120, yt:'https://www.youtube.com/results?search_query=жим+гантелей+сидя+техника', tips:['Спина опёрта на скамью — обязательно!','Гантели на уровне ушей','Жми вверх, не сводя над головой','Не запрокидывай голову','Вес одной гантели'], mistakes:['Прогиб поясницы','Без опоры для спины — нельзя при твоём диагнозе','Рывки']},
+        {name:'Планка на предплечьях', muscles:'Кор, стабилизаторы', sets:3, reps:'30 сек', sw:'—', rest:60, yt:null, tips:['Опора на предплечья и носки','Тело — прямая линия','Пресс и ягодицы напряжены','Не поднимай и не опускай таз','Дыши равномерно'], mistakes:['Таз вверх — пресс не работает','Таз вниз — поясница страдает','Задержка дыхания']},
+      ],
+      [
+        {name:'Жим гантелей лёжа', muscles:'Грудь, трицепс', sets:3, reps:'10', sw:'12', rest:180, yt:'https://www.youtube.com/results?search_query=жим+гантелей+лёжа+техника', tips:['Лопатки сведены','Гантели у плеч в старте','Жми вверх слегка сводя','Медленно опускай 2–3 сек','Вес одной гантели'], mistakes:['Отрыв поясницы','Рывок снизу','Гантели слишком широко']},
+        {name:'Жим ногами в тренажёре', muscles:'Ноги', sets:3, reps:'12', sw:'55', rest:150, yt:'https://www.youtube.com/results?search_query=жим+ногами+тренажёр+техника', tips:['Поясница всегда прижата!','Колени над носками','Полная амплитуда'], mistakes:['Отрыв поясницы!','Колени внутрь']},
+        {name:'Тяга к поясу на блоке (сидя)', muscles:'Спина широчайшие', sets:3, reps:'10', sw:'30', rest:150, yt:'https://www.youtube.com/results?search_query=тяга+к+поясу+блок+техника', tips:['Сидишь прямо, небольшой наклон вперёд','Тяни к поясу','Локти назад вдоль тела','Лопатки сводятся','Медленно возвращай'], mistakes:['Раскачка корпусом','Тяга руками а не спиной']},
+        {name:'Разведения гантелей в стороны', muscles:'Боковые дельты', sets:3, reps:'12', sw:'6', rest:90, yt:'https://www.youtube.com/results?search_query=разведения+гантелей+стороны+техника', tips:['Небольшой наклон вперёд','Руки чуть согнуты в локтях','До уровня плеч','Мизинец выше большого пальца','Медленно опускай','Вес одной гантели'], mistakes:['Слишком большой вес','Рывки корпусом','Выше плеч — трапеции перехватывают']},
+        {name:'Скручивания на пресс', muscles:'Пресс', sets:3, reps:'15', sw:'—', rest:60, yt:null, tips:['Лёжа, колени согнуты','Поднимай только лопатки','Поясница на полу всегда','Выдох при подъёме','Медленно опускай'], mistakes:['Тяга за шею','Полный подъём корпуса','Рывки']},
+      ]
+    ]
+  },
+  B: {
+    title:'ТРЕНИРОВКА B', badge:'Пятница · ~65 мин', badgeClass:'badge-green',
+    note:'<b>🏋️ Пятница</b> — основная тренировка. Fit Fabric — все тренажёры. Без осевой нагрузки на позвоночник.',
+    variants:[
+      [
+        {name:'Жим штанги лёжа', muscles:'Грудь', sets:4, reps:'8', sw:'25', rest:180, yt:'https://www.youtube.com/results?search_query=жим+лёжа+техника+начинающих', tips:['Лопатки сведены','Хват чуть шире плеч','К нижней части груди','Ноги на полу'], mistakes:['Отрыв ягодиц','Гриф к шее','Неполная амплитуда']},
+        {name:'Жим ногами в тренажёре', muscles:'Ноги', sets:4, reps:'10', sw:'55', rest:180, yt:'https://www.youtube.com/results?search_query=жим+ногами+тренажёр+техника', tips:['Поясница прижата — всегда!','Ноги на ширине плеч','Угол 90° внизу','Жми пятками'], mistakes:['Отрыв поясницы!','Колени внутрь']},
+        {name:'Тяга верхнего блока к груди', muscles:'Спина, бицепс', sets:3, reps:'10', sw:'32', rest:150, yt:'https://www.youtube.com/results?search_query=тяга+верхнего+блока+техника', tips:['Хват шире плеч','Откинь корпус немного','К верхней части груди','Лопатки внизу'], mistakes:['Сильный наклон назад','Рывки']},
+        {name:'Разгибания ног в тренажёре', muscles:'Квадрицепс', sets:3, reps:'12', sw:'20', rest:120, yt:'https://www.youtube.com/results?search_query=разгибания+ног+тренажёр+техника', tips:['Спина прижата к спинке','Полное разгибание вверху','Медленно опускай — 2 сек','Носки на себя'], mistakes:['Рывки','Неполная амплитуда']},
+        {name:'Разгибания рук на блоке', muscles:'Трицепс', sets:3, reps:'12', sw:'15', rest:90, yt:'https://www.youtube.com/results?search_query=разгибания+на+блоке+трицепс', tips:['Локти прижаты к телу','Небольшой наклон вперёд','До полного выпрямления','Медленно возвращай'], mistakes:['Локти гуляют','Раскачка корпусом']},
+        {name:'Сгибания рук с гантелями', muscles:'Бицепс', sets:3, reps:'12', sw:'9', rest:90, yt:'https://www.youtube.com/results?search_query=сгибания+рук+гантели+техника', tips:['Локти прижаты к телу','Сжатие бицепса вверху','Медленно вниз — 2 сек','Вес одной гантели'], mistakes:['Раскачка корпусом','Локти вперёд']},
+        {name:'Скручивания на пресс', muscles:'Пресс', sets:3, reps:'15', sw:'—', rest:60, yt:null, tips:['Только лопатки вверх','Поясница на полу'], mistakes:['Тяга за шею','Полный подъём']},
+      ],
+      [
+        {name:'Жим на наклонной скамье (гантели)', muscles:'Верх груди', sets:4, reps:'8', sw:'12', rest:180, yt:'https://www.youtube.com/results?search_query=жим+гантелей+наклонная+техника', tips:['Угол 30–45°','Лопатки сведены','К верхней части груди','Вес одной гантели'], mistakes:['Угол слишком большой — плечи','Отрыв поясницы']},
+        {name:'Жим ногами в тренажёре', muscles:'Ноги', sets:4, reps:'12', sw:'60', rest:180, yt:'https://www.youtube.com/results?search_query=жим+ногами+тренажёр+техника', tips:['Поясница прижата!','Пятками жми'], mistakes:['Отрыв поясницы!']},
+        {name:'Тяга к поясу на блоке', muscles:'Спина', sets:3, reps:'10', sw:'32', rest:150, yt:'https://www.youtube.com/results?search_query=тяга+к+поясу+блок+техника', tips:['Сидя прямо','К поясу','Лопатки сводятся'], mistakes:['Раскачка']},
+        {name:'Уги нания ног в тренажёре лёжа', muscles:'Бицепс бедра', sets:3, reps:'12', sw:'20', rest:120, yt:'https://www.youtube.com/results?search_query=сгибания+ног+лёжа+тренажёр+техника', tips:['Лёжа на животе','Полная амплитуда','Медленно опускай'], mistakes:['Рывки','Отрыв таза']},
+        {name:'Французский жим лёжа', muscles:'Трицепс', sets:3, reps:'12', sw:'12', rest:90, yt:'https://www.youtube.com/results?search_query=французский+жим+техника', tips:['Лёжа на скамье','Локти неподвижны','К голове опускай','Полное разгибание'], mistakes:['Локти разъезжаются','Слишком большой вес']},
+        {name:'Сгибания на блоке (бицепс)', muscles:'Бицепс', sets:3, reps:'12', sw:'15', rest:90, yt:'https://www.youtube.com/results?search_query=сгибания+на+блоке+бицепс', tips:['Локти у тела','Сжатие вверху','Медленно вниз'], mistakes:['Раскачка','Локти вперёд']},
+        {name:'Подъём ног в висе', muscles:'Пресс, кор', sets:3, reps:'10', sw:'—', rest:60, yt:null, tips:['Вис на турнике','До параллели','Без раскачки','Медленно опускай'], mistakes:['Раскачка','Рывок ногами']},
+      ]
+    ]
+  },
+  C: {
+    title:'ТРЕНИРОВКА C', badge:'Воскресенье · ~60 мин', badgeClass:'badge-green',
+    note:'<b>💪 Воскресенье</b> — акцент на ноги и плечи. Все упражнения без нагрузки на поясницу.',
+    variants:[
+      [
+        {name:'Жим ногами в тренажёре', muscles:'Ноги, ягодицы', sets:4, reps:'10', sw:'55', rest:180, yt:'https://www.youtube.com/results?search_query=жим+ногами+тренажёр+техника', tips:['Поясница прижата — всегда!','Ноги на ширине плеч','Жми пятками'], mistakes:['Отрыв поясницы!','Колени внутрь']},
+        {name:'Разгибания ног в тренажёре', muscles:'Квадрицепс', sets:3, reps:'12', sw:'20', rest:120, yt:'https://www.youtube.com/results?search_query=разгибания+ног+тренажёр', tips:['Спинка прижата','Полное разгибание','Медленно вниз'], mistakes:['Рывки']},
+        {name:'Ягодичный мостик (лёжа)', muscles:'Ягодицы, бицепс бедра', sets:4, reps:'15', sw:'—', rest:90, yt:'https://www.youtube.com/results?search_query=ягодичный+мостик+техника', tips:['Лёжа на спине, ступни у ягодиц','Поднимай таз до прямой линии','Сожми ягодицы вверху — 1 сек','Медленно опускай','Можно добавить блин на живот'], mistakes:['Переразгибание поясницы вверху','Ступни далеко от ягодиц']},
+        {name:'Жим гантелей сидя (с опорой)', muscles:'Плечи', sets:3, reps:'10', sw:'9', rest:150, yt:'https://www.youtube.com/results?search_query=жим+гантелей+сидя+техника', tips:['Спина опёрта на скамью!','Гантели у ушей','Жми вверх','Вес одной гантели'], mistakes:['Без опоры для спины — нельзя!','Прогиб поясницы']},
+        {name:'Разведения гантелей в стороны', muscles:'Боковые дельты', sets:3, reps:'12', sw:'6', rest:90, yt:'https://www.youtube.com/results?search_query=разведения+гантелей+стороны+техника', tips:['Наклон вперёд чуть','До уровня плеч','Медленно опускай','Вес одной гантели'], mistakes:['Тяжёлый вес','Рывки']},
+        {name:'Тяга гантели одной рукой', muscles:'Спина, бицепс', sets:3, reps:'10', sw:'12', rest:150, alt:true, yt:'https://www.youtube.com/results?search_query=тяга+гантели+одной+рукой+техника', tips:['Колено и рука на скамье','Спина параллельна полу','Локоть вверх и назад','Лопатка сжимается','Обе стороны = 1 подход · вес одной гантели'], mistakes:['Поворот корпуса','Неполная амплитуда']},
+        {name:'Скручивания на пресс', muscles:'Пресс', sets:2, reps:'20', sw:'—', rest:60, yt:null, tips:['Только лопатки вверх','Поясница на полу'], mistakes:['Тяга за шею']},
+      ],
+      [
+        {name:'Жим ногами узкая постановка ног', muscles:'Квадрицепс', sets:4, reps:'10', sw:'50', rest:180, yt:'https://www.youtube.com/results?search_query=жим+ногами+узкая+постановка', tips:['Ноги узко — акцент на квадрицепс','Поясница прижата всегда!'], mistakes:['Отрыв поясницы!']},
+        {name:'Уги нания ног в тренажёре лёжа', muscles:'Бицепс бедра', sets:3, reps:'12', sw:'20', rest:120, yt:'https://www.youtube.com/results?search_query=сгибания+ног+лёжа+тренажёр', tips:['Полная амплитуда','Медленно опускай'], mistakes:['Рывки','Отрыв таза']},
+        {name:'Ягодичный мостик (лёжа)', muscles:'Ягодицы', sets:4, reps:'15', sw:'—', rest:90, yt:'https://www.youtube.com/results?search_query=ягодичный+мостик+техника', tips:['Ступни у ягодиц','Таз до прямой линии','Сожми ягодицы наверху'], mistakes:['Переразгибание поясницы']},
+        {name:'Разведения гантелей лёжа', muscles:'Грудь', sets:3, reps:'12', sw:'8', rest:120, yt:'https://www.youtube.com/results?search_query=разведения+гантелей+лёжа+техника', tips:['Лёжа горизонтально','Руки чуть согнуты','Широко в стороны — растяжение','По дуге назад','Вес одной гантели'], mistakes:['Прямые локти — суставы страдают','Как жим вместо дуги']},
+        {name:'Жим гантелей сидя (с опорой)', muscles:'Плечи', sets:3, reps:'12', sw:'9', rest:120, yt:'https://www.youtube.com/results?search_query=жим+гантелей+сидя+техника', tips:['Спина опёрта!','Вес одной гантели'], mistakes:['Без опоры — нельзя!']},
+        {name:'Тяга верхнего блока к груди', muscles:'Спина', sets:3, reps:'10', sw:'32', rest:150, yt:'https://www.youtube.com/results?search_query=тяга+верхнего+блока+техника', tips:['Хват шире','К верхней части груди','Лопатки внизу'], mistakes:['Сильный наклон назад']},
+        {name:'Планка на предплечьях', muscles:'Кор', sets:3, reps:'40 сек', sw:'—', rest:60, yt:null, tips:['Тело прямая линия','Пресс напряжён'], mistakes:['Таз вверх или вниз']},
+      ]
+    ]
+  }
+};
+
+// ═══════════════════════════════════════════════════════
+//  DATA — BACK / REHAB WORKOUTS
+// ═══════════════════════════════════════════════════════
+const BACK_WORKOUTS = {
+  S1: {
+    title:'СПИНА — БЛОК 1', badge:'Стабилизация · ~30 мин', badgeClass:'badge-pink',
+    note:'<b>🦴 Реабилитация</b> — упражнения для мышечного корсета. Без весов или очень лёгкий вес. Медленно, с контролем. Можно делать в дополнение к любой основной тренировке или отдельно.',
+    variants:[[
+      {name:'Bird-Dog (птица-собака)', muscles:'Мультифидус, стабилизаторы', sets:3, reps:'10 кажд.', sw:'—', rest:45, alt:true, rehab:true, yt:'https://www.youtube.com/results?search_query=bird+dog+упражнение+техника', tips:['На четвереньках — колени под бёдрами, руки под плечами','Одновременно вытяни противоположные руку и ногу','Спина — ровная горизонтальная поверхность','Держи 2–3 секунды, вернись','Не поднимай выше параллели с полом','Обе стороны = 1 подход'], mistakes:['Поворот таза','Прогиб в пояснице','Слишком высоко поднимаешь']},
+      {name:'Ягодичный мостик (без веса)', muscles:'Ягодицы, бицепс бедра, стабилизаторы', sets:3, reps:'15', sw:'—', rest:60, rehab:true, yt:'https://www.youtube.com/results?search_query=ягодичный+мостик+техника', tips:['Лёжа на спине, ступни у ягодиц','Таз вверх — прямая линия от колен до плеч','Сожми ягодицы наверху — 2 сек','Медленно опускай — 3 сек','Поясница не переразгибается'], mistakes:['Слишком высоко — поясница переразгибается','Ступни далеко','Быстро без контроля']},
+      {name:'Кошка-Корова', muscles:'Разгибатели спины, гибкость позвоночника', sets:3, reps:'10', sw:'—', rest:30, rehab:true, yt:'https://www.youtube.com/results?search_query=кошка+корова+упражнение+позвоночник', tips:['На четвереньках','Кошка: выгни спину вверх, голова вниз','Корова: прогни спину вниз, голова вверх','Медленно, в ритме дыхания — выдох при кошке','10 плавных циклов'], mistakes:['Резкие движения','Только шея двигается — должен весь позвоночник']},
+      {name:'Боковая планка (с колена)', muscles:'Косые мышцы, квадратная поясничная', sets:3, reps:'20 сек', sw:'—', rest:45, alt:true, rehab:true, yt:'https://www.youtube.com/results?search_query=боковая+планка+с+колена+техника', tips:['Опора на предплечье и согнутое колено (легче чем обычная)','Таз вверх — тело прямая линия','Свободная рука на боку или вверх','Потом меняй сторону','Когда окрепнешь — переходи на носки'], mistakes:['Таз провисает','Перекос корпуса']},
+      {name:'Superman (лёжа на животе)', muscles:'Разгибатели спины, ягодицы', sets:3, reps:'12', sw:'—', rest:45, rehab:true, yt:'https://www.youtube.com/results?search_query=superman+упражнение+спина+техника', tips:['Лёжа на животе, руки вперёд','Одновременно поднимай руки и ноги невысоко','Держи 2 секунды','Медленно опускай','Не задерживай дыхание'], mistakes:['Слишком высоко поднимаешь — поясница перегружается','Резкий подъём']},
+      {name:'Ягодичный мостик одной ногой', muscles:'Ягодицы, стабилизаторы таза', sets:3, reps:'10 кажд.', sw:'—', rest:60, alt:true, rehab:true, yt:'https://www.youtube.com/results?search_query=ягодичный+мостик+одной+ногой', tips:['Как обычный мостик но одна нога вытянута','Таз не перекашивается — контролируй','Обе стороны = 1 подход','Сложнее — даёт стабилизацию таза'], mistakes:['Таз перекашивается в сторону','Слишком высоко']},
+    ],[
+      {name:'Dead Bug (мёртвый жук)', muscles:'Поперечный пресс, стабилизаторы', sets:3, reps:'10 кажд.', sw:'—', rest:45, alt:true, rehab:true, yt:'https://www.youtube.com/results?search_query=dead+bug+упражнение+техника', tips:['Лёжа на спине, руки вверх, ноги согнуты 90°','Медленно опускай противоположные руку и ногу','Поясница прижата к полу — всегда!','Вернись и повторяй другой стороной','Дыши — выдох при движении'], mistakes:['Поясница отрывается от пола — главная ошибка','Быстро без контроля','Слишком низко опускаешь ноги']},
+      {name:'Ягодичный мостик с блином', muscles:'Ягодицы, бицепс бедра', sets:3, reps:'15', sw:'3', rest:60, rehab:true, yt:'https://www.youtube.com/results?search_query=ягодичный+мостик+с+весом+техника', tips:['Блин на нижнем животе — держи руками','Выполнение как обычный мостик','До прямой линии бёдра-туловище','Сожми ягодицы наверху — 2 сек'], mistakes:['Переразгибание поясницы','Блин сползает — держи крепче']},
+      {name:'Кошка-Корова', muscles:'Позвоночник, гибкость', sets:3, reps:'12', sw:'—', rest:30, rehab:true, yt:'https://www.youtube.com/results?search_query=кошка+корова+упражнение+позвоночник', tips:['На четвереньках','Плавные циклы в ритме дыхания','Весь позвоночник двигается'], mistakes:['Резкие движения']},
+      {name:'Боковая планка (с носка)', muscles:'Косые, квадратная поясничная', sets:3, reps:'25 сек', sw:'—', rest:45, alt:true, rehab:true, yt:'https://www.youtube.com/results?search_query=боковая+планка+техника', tips:['Опора на предплечье и ребро стопы','Тело — прямая линия','Таз не опускай','Меняй стороны'], mistakes:['Таз провисает','Перекос вперёд или назад']},
+      {name:'Bird-Dog с задержкой', muscles:'Мультифидус, стабилизаторы', sets:3, reps:'8 кажд.', sw:'—', rest:45, alt:true, rehab:true, yt:'https://www.youtube.com/results?search_query=bird+dog+упражнение+техника', tips:['Как обычный Bird-Dog','Но держи позицию 5 секунд','Это сложнее — требует больше контроля'], mistakes:['Поворот таза','Прогиб поясницы']},
+      {name:'Разгибания спины на фитболе или полу', muscles:'Разгибатели спины', sets:3, reps:'12', sw:'—', rest:60, rehab:true, yt:'https://www.youtube.com/results?search_query=гиперэкстензия+без+тренажёра+техника', tips:['Лёжа на животе','Руки за голову или вперёд','Поднимай грудь от пола невысоко — 10–15 см','Держи 1 сек','Медленно опускай'], mistakes:['Слишком высоко — перегрузка','Резкий подъём']},
+    ]]
+  },
+  S2: {
+    title:'СПИНА — БЛОК 2', badge:'Укрепление · ~35 мин', badgeClass:'badge-pink',
+    note:'<b>🦴 Укрепление корсета</b> — чуть более интенсивный блок. Добавлены упражнения с лёгким весом для мышц спины через тренажёры.',
+    variants:[[
+      {name:'Bird-Dog', muscles:'Стабилизаторы', sets:3, reps:'10 кажд.', sw:'—', rest:45, alt:true, rehab:true, yt:'https://www.youtube.com/results?search_query=bird+dog+упражнение', tips:['Противоположные рука и нога','Спина ровная','Держи 3 сек','Обе стороны = 1 подход'], mistakes:['Поворот таза','Прогиб поясницы']},
+      {name:'Ягодичный мостик одной ногой', muscles:'Ягодицы, стабилизаторы', sets:3, reps:'12 кажд.', sw:'—', rest:60, alt:true, rehab:true, yt:'https://www.youtube.com/results?search_query=ягодичный+мостик+одной+ногой', tips:['Одна нога вытянута','Таз не перекашивать','Сожми ягодицы вверху'], mistakes:['Перекос таза']},
+      {name:'Тяга горизонтального блока (сидя)', muscles:'Ромбовидные, трапеции', sets:3, reps:'12', sw:'25', rest:90, rehab:true, yt:'https://www.youtube.com/results?search_query=тяга+горизонтального+блока+техника', tips:['Сидишь ровно','Тяни к поясу','Лопатки сводятся — держи 1 сек','Медленно вперёд'], mistakes:['Раскачка корпусом','Ссутулившись']},
+      {name:'Кошка-Корова', muscles:'Позвоночник', sets:2, reps:'12', sw:'—', rest:30, rehab:true, yt:'https://www.youtube.com/results?search_query=кошка+корова+позвоночник', tips:['Плавно в ритме дыхания'], mistakes:['Резко']},
+      {name:'Dead Bug', muscles:'Поперечный пресс', sets:3, reps:'10 кажд.', sw:'—', rest:45, alt:true, rehab:true, yt:'https://www.youtube.com/results?search_query=dead+bug+техника', tips:['Поясница прижата к полу всегда!','Медленно и с контролем'], mistakes:['Поясница отрывается!']},
+      {name:'Superman', muscles:'Разгибатели спины', sets:3, reps:'12', sw:'—', rest:45, rehab:true, yt:'https://www.youtube.com/results?search_query=superman+упражнение+спина', tips:['Лёжа на животе','Поднимай руки и ноги невысоко','Держи 2 сек'], mistakes:['Слишком высоко']},
+    ],[
+      {name:'Dead Bug', muscles:'Стабилизаторы', sets:3, reps:'12 кажд.', sw:'—', rest:45, alt:true, rehab:true, yt:'https://www.youtube.com/results?search_query=dead+bug+техника', tips:['Поясница прижата — главное!','Медленно'], mistakes:['Поясница отрывается!']},
+      {name:'Ягодичный мостик с блином', muscles:'Ягодицы', sets:4, reps:'15', sw:'5', rest:60, rehab:true, yt:'https://www.youtube.com/results?search_query=ягодичный+мостик+с+весом', tips:['Блин на животе','До прямой линии','Сожми ягодицы 2 сек'], mistakes:['Переразгибание поясницы']},
+      {name:'Тяга верхнего блока (узкий хват)', muscles:'Широчайшие, ромбовидные', sets:3, reps:'12', sw:'25', rest:90, rehab:true, yt:'https://www.youtube.com/results?search_query=тяга+верхнего+блока+узкий+хват', tips:['Узкий нейтральный хват','К нижней части груди','Лопатки вниз и внутрь'], mistakes:['Раскачка','Рывки']},
+      {name:'Боковая планка', muscles:'Косые, квадратная поясничная', sets:3, reps:'25 сек', sw:'—', rest:45, alt:true, rehab:true, yt:'https://www.youtube.com/results?search_query=боковая+планка+техника', tips:['Прямая линия тела','Таз не опускай'], mistakes:['Таз провисает']},
+      {name:'Bird-Dog с задержкой', muscles:'Мультифидус', sets:3, reps:'8 кажд.', sw:'—', rest:45, alt:true, rehab:true, yt:'https://www.youtube.com/results?search_query=bird+dog+техника', tips:['5 сек держи позицию','Без поворота таза'], mistakes:['Поворот таза']},
+      {name:'Разгибания спины лёжа', muscles:'Разгибатели', sets:3, reps:'15', sw:'—', rest:45, rehab:true, yt:'https://www.youtube.com/results?search_query=гиперэкстензия+лёжа+на+полу', tips:['Грудь от пола 10–15 см','Держи 1 сек','Медленно'], mistakes:['Слишком высоко']},
+    ]]
+  }
+};
+
+// HOME EXERCISES
+const HOME_EXERCISES = [
+  {icon:'🤸',name:'Отжимания от пола',meta:'3 × max',tip:'Тело — прямая линия. Если легко — ноги на стул.'},
+  {icon:'💪',name:'Сгибания рук с гантелями',meta:'3 × 15 | ~5–7 кг',tip:'Локти у тела. Медленно опускай.'},
+  {icon:'🔄',name:'Разведения гантелей в стороны',meta:'3 × 15 | 1–2 кг',tip:'Лёгкий вес — норма для дельт.'},
+  {icon:'🦵',name:'Ягодичный мостик',meta:'3 × 20 | без веса',tip:'Безопасен для спины. Отлично для ягодиц и бицепса бедра.'},
+  {icon:'🐦',name:'Bird-Dog',meta:'3 × 10 каждой стороной',tip:'Главное реабилитационное упражнение. Делай каждый день.'},
+  {icon:'🐄',name:'Кошка-Корова',meta:'3 × 10 циклов',tip:'Утром перед работой — отлично для спины.'},
+  {icon:'🧘',name:'Планка на предплечьях',meta:'3 × 45 сек',tip:'Пресс и ягодицы напряжены. Дыши равномерно.'},
+  {icon:'🏋️',name:'Разведения гантелей лёжа',meta:'3 × 12 | ~5–7 кг',tip:'По дуге в стороны — растяжение груди. Вес одной гантели.'},
+];
+
+const PRINCIPLES = [
+  {n:'01',title:'Спина — приоритет',text:'При твоём диагнозе (дископатия L5-S1, спондилолистез L4-L5) осевая нагрузка на позвоночник исключена. Все упражнения заменены на безопасные аналоги. Это не ограничение — это правильная тренировка.'},
+  {n:'02',title:'Пояс на рабочих подходах',text:'Надевай пояс на упражнения с весом. Снимай между подходами — мышцы кора должны работать самостоятельно между подходами. На разминочных подходах пояс не нужен.'},
+  {n:'03',title:'Прогрессия — очень плавно',text:'При проблемах со спиной увеличивай вес не чаще раз в 2 недели, а не еженедельно. Маленький шаг — 2.5 кг. Если чувствуешь дискомфорт в спине — вес не добавляешь.'},
+  {n:'04',title:'Блок на спину — обязательно',text:'Упражнения Bird-Dog, ягодичный мостик, Dead Bug, Кошка-Корова укрепляют мышечный корсет вокруг позвоночника. Это защита дисков. Делай блок спины минимум 2 раза в неделю.'},
+  {n:'05',title:'Прогрессивная перегрузка',text:'Сделал все подходы на нужное количество повторений — следующая тренировка +2.5 кг. Без этого мышцы не растут. Записывай всё в дневник.'},
+  {n:'06',title:'Восстановление важнее тренировки',text:'Мышцы растут во время отдыха. 7–8 часов сна = обязательное условие. Особенно при физической работе на складе.'},
+  {n:'07',title:'Питание — половина результата',text:'3800 ккал и 160г белка в день. Без профицита калорий мышцы не растут даже при идеальных тренировках.'},
+  {n:'08',title:'Боль в спине — стоп-сигнал',text:'Любая острая боль в пояснице во время упражнения = немедленно останавливаешься. Лёгкое ощущение работы мышц — нормально. Боль — нет.'},
+];
+
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+let workoutType = 'main'; // 'main' | 'back'
+let currentWorkout = 'A';
+let currentWeek = 1;
+let manualVariant = null;
+let completedExercises = new Set();
+let setData = {};
+let workoutStartTime = null;
+let workoutTimerInterval = null;
+let restTimerInterval = null;
+let restTimerSeconds = 0;
+let diaryData = [];
+let statsData = {sessions:0,tonnage:0,streak:0,lastDate:'',PRs:{},weeks:{}};
+let diarySha = null, statsSha = null;
+
+// ═══════════════════════════════════════════════════════
+//  GITHUB API
+// ═══════════════════════════════════════════════════════
+function ghHeaders(){const t=localStorage.getItem('gh_token')||'';return{'Authorization':'token '+t,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'}}
+function ghBase(){const u=localStorage.getItem('gh_user')||'',r=localStorage.getItem('gh_repo')||'';return`https://api.github.com/repos/${u}/${r}/contents`}
+
+async function ghGet(path){
+  const r=await fetch(ghBase()+path,{headers:ghHeaders()});
+  if(!r.ok){if(r.status===404)return null;throw new Error(r.status)}
+  const d=await r.json();
+  return{content:JSON.parse(decodeURIComponent(escape(atob(d.content.replace(/\n/g,''))))),sha:d.sha}
+}
+async function ghPut(path,content,sha){
+  const body={message:`update ${path}`,content:btoa(unescape(encodeURIComponent(JSON.stringify(content,null,2))))};
+  if(sha)body.sha=sha;
+  const r=await fetch(ghBase()+path,{method:'PUT',headers:ghHeaders(),body:JSON.stringify(body)});
+  if(!r.ok)throw new Error(r.status);
+  return await r.json()
+}
+
+async function loadFromGitHub(){
+  setSyncStatus('loading','Загрузка...');
+  try{
+    const d=await ghGet('/data/workout-diary.json');
+    if(d){diaryData=d.content;diarySha=d.sha}else diaryData=[];
+    const s=await ghGet('/data/workout-stats.json');
+    if(s){statsData=s.content;statsSha=s.sha}else statsData={sessions:0,tonnage:0,streak:0,lastDate:'',PRs:{},weeks:{}};
+    if(!statsData.PRs)statsData.PRs={};
+    if(!statsData.weeks)statsData.weeks={};
+    currentWeek=Math.max(1,Math.ceil((statsData.sessions||0)/3));
+    setSyncStatus('ok','Синхронизировано');
+    updateHeaderStats();renderDiary();updateVariantUI();
+  }catch(e){setSyncStatus('err','Ошибка');showToast('Ошибка загрузки. Проверь токен.','err')}
+}
+
+async function saveToGitHub(){
+  setSyncStatus('loading','Сохранение...');
+  try{
+    const dr=await ghPut('/data/workout-diary.json',diaryData,diarySha);
+    diarySha=dr.content.sha;
+    const sr=await ghPut('/data/workout-stats.json',statsData,statsSha);
+    statsSha=sr.content.sha;
+    setSyncStatus('ok','Сохранено');showToast('✓ Сохранено в GitHub','ok')
+  }catch(e){setSyncStatus('err','Ошибка');showToast('Ошибка: '+e.message,'err')}
+}
+
+function manualSync(){loadFromGitHub()}
+function setSyncStatus(state,label){document.getElementById('syncStatus').className='sync-status '+state;document.getElementById('syncLabel').textContent=label}
+
+// ═══════════════════════════════════════════════════════
+//  WORKOUT TYPE
+// ═══════════════════════════════════════════════════════
+function selectWorkoutType(type){
+  workoutType=type;
+  document.getElementById('wtMain').classList.toggle('active',type==='main');
+  document.getElementById('wtBack').classList.toggle('active',type==='back');
+  completedExercises=new Set();setData={};
+  document.getElementById('workoutNotes').value='';
+  buildWorkoutControls();
+  loadWorkout();
+}
+
+function buildWorkoutControls(){
+  const controls=document.getElementById('workoutControls');
+  const weekGrid=document.getElementById('weekGrid');
+  const saveBtn=document.getElementById('saveBtn');
+  const startBtn=document.getElementById('startBtn');
+  const progBar=document.getElementById('progressBar');
+
+  if(workoutType==='main'){
+    controls.innerHTML=['A','B','C'].map(k=>`<button class="wk-btn${k===currentWorkout?' active':''}" id="btn${k}" onclick="selectWorkout('${k}')">${k}</button>`).join('');
+    weekGrid.innerHTML=`
+      <div class="wday off"><div class="wday-name">Пн</div><div class="wday-val">Работа</div></div>
+      <div class="wday off"><div class="wday-name">Вт</div><div class="wday-val">Работа</div></div>
+      <div class="wday gym"><div class="wday-name">Ср</div><div class="wday-val">A</div></div>
+      <div class="wday off"><div class="wday-name">Чт</div><div class="wday-val">Работа</div></div>
+      <div class="wday gym"><div class="wday-name">Пт</div><div class="wday-val">B</div></div>
+      <div class="wday off"><div class="wday-name">Сб</div><div class="wday-val">Отдых</div></div>
+      <div class="wday gym"><div class="wday-name">Вс</div><div class="wday-val">C</div></div>`;
+    saveBtn.className='save-btn';startBtn.className='start-btn';progBar.className='prog-inner';
+  }else{
+    controls.innerHTML=['S1','S2'].map(k=>`<button class="wk-btn${k===currentWorkout?' active back':''}" id="btn${k}" onclick="selectWorkout('${k}')">${k==='S1'?'БЛОК 1':'БЛОК 2'}</button>`).join('');
+    weekGrid.innerHTML=`
+      <div class="wday off"><div class="wday-name">Пн</div><div class="wday-val">Работа</div></div>
+      <div class="wday off"><div class="wday-name">Вт</div><div class="wday-val">Работа</div></div>
+      <div class="wday gym-back"><div class="wday-name">Ср</div><div class="wday-val">S</div></div>
+      <div class="wday off"><div class="wday-name">Чт</div><div class="wday-val">Работа</div></div>
+      <div class="wday gym-back"><div class="wday-name">Пт</div><div class="wday-val">S</div></div>
+      <div class="wday off"><div class="wday-name">Сб</div><div class="wday-val">Отдых</div></div>
+      <div class="wday gym-back"><div class="wday-name">Вс</div><div class="wday-val">S</div></div>`;
+    if(!['S1','S2'].includes(currentWorkout))currentWorkout='S1';
+    saveBtn.className='save-btn back-mode';startBtn.className='start-btn back-mode';progBar.className='prog-inner back-mode';
+  }
+}
+
+function selectWorkout(key){
+  currentWorkout=key;completedExercises=new Set();setData={};
+  document.getElementById('workoutNotes').value='';
+  // update buttons
+  const keys=workoutType==='main'?['A','B','C']:['S1','S2'];
+  keys.forEach(k=>{
+    const b=document.getElementById('btn'+k);
+    if(b)b.className='wk-btn'+(k===key?' active'+(workoutType==='back'?' back':''):'');
+  });
+  loadWorkout();
+}
+
+// ═══════════════════════════════════════════════════════
+//  WEEK / VARIANT
+// ═══════════════════════════════════════════════════════
+function getVariant(){return manualVariant!==null?manualVariant:(currentWeek%2===0?1:0)}
+function prevWeek(){if(currentWeek>1){currentWeek--;manualVariant=null;updateVariantUI();loadWorkout()}}
+function nextWeek(){currentWeek++;manualVariant=null;updateVariantUI();loadWorkout()}
+function toggleVariant(){manualVariant=getVariant()===0?1:0;updateVariantUI();loadWorkout()}
+function updateVariantUI(){
+  const v=getVariant();
+  document.getElementById('wsWeekNum').textContent='Неделя '+currentWeek;
+  document.getElementById('wsVariant').textContent=(v===0?'Вариант А':'Вариант Б')+(manualVariant!==null?' (ручной)':' (авто)');
+  document.getElementById('variantBtn').textContent=v===0?'Вариант Б':'Вариант А';
+  document.getElementById('statWeek').textContent=currentWeek;
+}
+
+// ═══════════════════════════════════════════════════════
+//  LOAD WORKOUT
+// ═══════════════════════════════════════════════════════
+function getWorkoutData(){return workoutType==='main'?MAIN_WORKOUTS:BACK_WORKOUTS}
+
+function loadWorkout(){
+  const w=getWorkoutData()[currentWorkout];
+  if(!w)return;
+  const v=getVariant();
+  const exercises=w.variants[v]||w.variants[0];
+
+  document.getElementById('workoutTitle').textContent=w.title;
+  const badge=document.getElementById('workoutBadge');
+  badge.textContent=w.badge;badge.className='badge '+w.badgeClass;
+  document.getElementById('workoutNote').innerHTML=w.note;
+  document.getElementById('workoutNote').className='note-box'+(workoutType==='back'?' pink':'');
+
+  renderExercises(exercises);
+  updateProgress(exercises.length);
+}
+
+// ═══════════════════════════════════════════════════════
+//  RENDER EXERCISES
+// ═══════════════════════════════════════════════════════
+function getLastSession(exName){
+  for(const entry of diaryData){
+    const ex=entry.exercises?.find(e=>e.name===exName);
+    if(ex&&ex.sets?.length)return ex;
+  }return null;
+}
+function getSuggestedWeight(exName){
+  const last=getLastSession(exName);
+  if(!last)return null;
+  const allDone=last.sets.every(s=>s.done);
+  if(!allDone)return null;
+  const maxW=Math.max(...last.sets.map(s=>parseFloat(s.weight)||0));
+  return maxW>0?(maxW+2.5).toFixed(1):null;
+}
+function getPR(exName){return statsData.PRs?.[exName]||null}
+
+function renderExercises(exercises){
+  const container=document.getElementById('exerciseList');
+  container.innerHTML='';
+
+  exercises.forEach((ex,idx)=>{
+    if(!setData[idx])setData[idx]={sets:Array.from({length:ex.sets},()=>({weight:'',reps:ex.reps,done:false})),notes:''};
+    const last=getLastSession(ex.name);
+    const suggest=ex.sw!=='—'?getSuggestedWeight(ex.name):null;
+    const pr=getPR(ex.name);
+    const isDone=completedExercises.has(idx);
+
+    // last session row
+    let lastHtml='';
+    if(last){
+      const setsStr=last.sets.map(s=>`${s.weight||'?'}×${s.reps}`).join(' | ');
+      lastHtml=`<div class="last-session"><span>Прошлый раз:</span><span class="ls-data">${setsStr}</span>${suggest?`<span class="ls-suggest">→ ${suggest} кг</span>`:''} ${pr?`<span class="ls-pr">🏆 ${pr.weight}кг</span>`:''}</div>`;
+    }else{
+      lastHtml=`<div class="last-session"><span>Первый раз</span><span class="ls-data">${ex.sw!=='—'?'старт: '+ex.sw+' кг':'без веса'}</span></div>`;
+    }
+
+    // sets
+    let setsHtml='';
+    const ph=suggest||ex.sw.split('-')[0];
+    setData[idx].sets.forEach((s,si)=>{
+      setsHtml+=`<div class="set-row">
+        <div class="set-num">${si+1}</div>
+        <input class="set-inp" type="number" placeholder="${ex.sw!=='—'?ph:'—'}" value="${s.weight}" inputmode="numeric"
+          oninput="setData[${idx}].sets[${si}].weight=this.value;saveDraft()" ${ex.sw==='—'?'disabled':''}>
+        <input class="set-inp" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="${ex.reps}" value="${s.reps}"
+          oninput="setData[${idx}].sets[${si}].reps=this.value;saveDraft()">
+        <button class="set-done${s.done?' ok':''}" onclick="toggleSetDone(${idx},${si})">${s.done?'✓ ОК':'ОК?'}</button>
+      </div>`;
+    });
+
+    const hasTips=ex.tips&&ex.tips.length;
+    const altTag=ex.alt?`<span class="tag tag-alt">⇄ обе стороны</span>`:'';
+    const rehabTag=ex.rehab?`<span class="tag tag-rehab">🦴 реабилитация</span>`:'';
+    const prTag=pr?`<span class="tag tag-pr">🏆 PR: ${pr.weight}кг</span>`:'';
+    const ytHtml=ex.yt?`<a class="yt-btn" href="${ex.yt}" target="_blank">▶ техника на YouTube</a>`:'';
+
+    const card=document.createElement('div');
+    card.className='ex-card'+(isDone?' done':'')+(ex.rehab?' rehab':'');
+    card.id='ec-'+idx;
+    card.innerHTML=`
+      <div class="ex-card-header" onclick="toggleCardBody(${idx})">
+        <div class="ex-n">${String(idx+1).padStart(2,'0')}</div>
+        <div class="ex-main">
+          <div class="ex-name-row">
+            <div class="ex-name">${ex.name}</div>
+            ${hasTips?`<button class="tip-btn" onclick="event.stopPropagation();openTechModal(${idx})" title="Техника">?</button>`:''}
+          </div>
+          <div class="ex-tags">
+            <span class="tag tag-sets">${ex.sets}×${ex.reps}</span>
+            <span class="tag tag-muscle">${ex.muscles}</span>
+            ${ex.sw!=='—'?`<span class="tag tag-weight">${ex.sw} кг</span>`:`<span class="tag tag-noweight">без веса</span>`}
+            ${prTag}${altTag}${rehabTag}
+          </div>
+        </div>
+        <button class="ex-check" onclick="event.stopPropagation();toggleExercise(${idx})">${isDone?'✓':'○'}</button>
+      </div>
+      ${lastHtml}
+      <div class="sets-area" id="sa-${idx}" style="display:${isDone?'none':'block'}">
+        <div class="sets-grid-header">
+          <div class="sgh-cell">#</div>
+          <div class="sgh-cell">ВЕС кг</div>
+          <div class="sgh-cell">ПОВТОРЫ</div>
+          <div class="sgh-cell">СТАТУС</div>
+        </div>
+        ${setsHtml}
+        <div class="ex-notes-wrap">
+          <div class="ex-notes-label">Заметки</div>
+          <textarea class="ex-notes" placeholder="Ощущения..." oninput="setData[${idx}].notes=this.value;saveDraft()">${setData[idx].notes}</textarea>
+        </div>
+        ${ytHtml}
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+function toggleCardBody(idx){const sa=document.getElementById('sa-'+idx);sa.style.display=sa.style.display==='none'?'block':'none'}
+
+function toggleSetDone(exIdx,setIdx){
+  setData[exIdx].sets[setIdx].done=!setData[exIdx].sets[setIdx].done;
+  const w=getWorkoutData()[currentWorkout];
+  const v=getVariant();
+  const ex=(w.variants[v]||w.variants[0])[exIdx];
+  if(setData[exIdx].sets[setIdx].done)startRestTimer(ex.rest);
+  saveDraft();
+  const rows=document.querySelectorAll(`#sa-${exIdx} .set-row`);
+  if(rows[setIdx]){const btn=rows[setIdx].querySelector('.set-done');const d=setData[exIdx].sets[setIdx].done;btn.className='set-done'+(d?' ok':'');btn.textContent=d?'✓ ОК':'ОК?'}
+}
+
+function toggleExercise(idx){
+  if(completedExercises.has(idx))completedExercises.delete(idx);
+  else{
+    completedExercises.add(idx);
+    const w=getWorkoutData()[currentWorkout];const v=getVariant();
+    const ex=(w.variants[v]||w.variants[0])[idx];
+    startRestTimer(ex.rest);
+  }
+  const card=document.getElementById('ec-'+idx);
+  const check=card.querySelector('.ex-check');
+  if(completedExercises.has(idx)){card.classList.add('done');check.textContent='✓';document.getElementById('sa-'+idx).style.display='none'}
+  else{card.classList.remove('done');check.textContent='○';document.getElementById('sa-'+idx).style.display='block'}
+  const w=getWorkoutData()[currentWorkout];const v=getVariant();
+  updateProgress((w.variants[v]||w.variants[0]).length);
+  saveDraft();
+}
+
+function updateProgress(total){
+  const done=completedExercises.size;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('progressBar').style.width=pct+'%';
+  document.getElementById('progressText').textContent=done+' / '+total;
+}
+
+// ═══════════════════════════════════════════════════════
+//  TIMERS
+// ═══════════════════════════════════════════════════════
+function startRestTimer(seconds){
+  stopRestTimer();restTimerSeconds=seconds;
+  document.getElementById('restTimerBar').classList.add('visible');
+  updateRestDisplay();
+  restTimerInterval=setInterval(()=>{restTimerSeconds--;if(restTimerSeconds<=0){stopRestTimer();return}updateRestDisplay()},1000)
+}
+function stopRestTimer(){clearInterval(restTimerInterval);document.getElementById('restTimerBar').classList.remove('visible')}
+function updateRestDisplay(){const m=Math.floor(restTimerSeconds/60),s=restTimerSeconds%60;document.getElementById('restTimeDisplay').textContent=m+':'+String(s).padStart(2,'0')}
+
+function toggleWorkoutTimer(){
+  if(workoutStartTime){
+    workoutStartTime=null;clearInterval(workoutTimerInterval);
+    document.getElementById('workoutTimerBar').classList.remove('visible');
+    const sb=document.getElementById('startBtn');
+    sb.textContent='▶ НАЧАТЬ ТРЕНИРОВКУ';sb.classList.remove('active');
+  }else{
+    workoutStartTime=Date.now();
+    document.getElementById('workoutTimerBar').classList.add('visible');
+    const sb=document.getElementById('startBtn');
+    sb.textContent='■ ЗАВЕРШИТЬ ТРЕНИРОВКУ';sb.classList.add('active');
+    workoutTimerInterval=setInterval(()=>{
+      const el=Math.floor((Date.now()-workoutStartTime)/1000);
+      const m=Math.floor(el/60),s=el%60;
+      document.getElementById('workoutTimeDisplay').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')
+    },1000)
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  SAVE WORKOUT
+// ═══════════════════════════════════════════════════════
+function calcTonnage(){let t=0;Object.values(setData).forEach(d=>d.sets.forEach(s=>t+=(parseFloat(s.weight)||0)*(parseInt(s.reps)||0)));return Math.round(t)}
+
+async function saveWorkout(){
+  const btn=document.getElementById('saveBtn');btn.disabled=true;
+  const w=getWorkoutData()[currentWorkout];
+  const v=getVariant();
+  const exercises=(w.variants[v]||w.variants[0]);
+  const tonnage=calcTonnage();
+  const now=new Date();
+
+  const entry={
+    date:now.toLocaleDateString('ru-RU'),dateISO:now.toISOString().slice(0,10),
+    week:currentWeek,workout:currentWorkout,variant:v,
+    workoutType,title:w.title,
+    duration:workoutStartTime?Math.floor((Date.now()-workoutStartTime)/60):null,
+    completed:completedExercises.size,total:exercises.length,
+    completionPct:Math.round(completedExercises.size/exercises.length*100),
+    tonnage,notes:document.getElementById('workoutNotes').value,
+    exercises:exercises.map((ex,idx)=>{
+      const d=setData[idx]||{sets:[],notes:''};
+      return{name:ex.name,sets:d.sets.map(s=>({weight:s.weight||'',reps:s.reps||ex.reps,done:s.done})),notes:d.notes}
+    })
+  };
+
+  diaryData.unshift(entry);
+  const today=now.toDateString();
+  statsData.sessions=(statsData.sessions||0)+1;
+  statsData.tonnage=(statsData.tonnage||0)+tonnage;
+  if(statsData.lastDate!==today){statsData.streak=(statsData.streak||0)+1;statsData.lastDate=today}
+  if(!statsData.PRs)statsData.PRs={};
+
+  exercises.forEach((ex,idx)=>{
+    const d=setData[idx];if(!d)return;
+    const maxW=Math.max(...d.sets.map(s=>parseFloat(s.weight)||0));
+    if(maxW>0){const cur=statsData.PRs[ex.name];if(!cur||maxW>cur.weight)statsData.PRs[ex.name]={weight:maxW,date:now.toLocaleDateString('ru-RU')}}
+  });
+
+  if(!statsData.weeks)statsData.weeks={};
+  const wk='w'+currentWeek;
+  if(!statsData.weeks[wk])statsData.weeks[wk]={tonnage:0,sessions:0,completionTotal:0};
+  statsData.weeks[wk].tonnage+=tonnage;statsData.weeks[wk].sessions+=1;statsData.weeks[wk].completionTotal+=entry.completionPct;
+
+  updateHeaderStats();renderDiary();
+  await saveToGitHub();
+  btn.disabled=false;
+  if(workoutStartTime)toggleWorkoutTimer();
+  completedExercises=new Set();setData={};
+  document.getElementById('workoutNotes').value='';
+  clearDraft();loadWorkout();
+}
+
+function updateHeaderStats(){
+  document.getElementById('statSessions').textContent=statsData.sessions||0;
+  document.getElementById('statTonnage').textContent=statsData.tonnage||0;
+  document.getElementById('statStreak').textContent=statsData.streak||0;
+  document.getElementById('statPRs').textContent=Object.keys(statsData.PRs||{}).length;
+  document.getElementById('statWeek').textContent=currentWeek;
+}
+
+// ═══════════════════════════════════════════════════════
+//  DIARY
+// ═══════════════════════════════════════════════════════
+function renderDiary(){
+  const container=document.getElementById('diaryList');
+  if(!diaryData.length){container.innerHTML=`<div class="empty-state"><span class="big">📓</span>Дневник пуст.<br>Заверши первую тренировку<br>и нажми «Сохранить».</div>`;return}
+  container.innerHTML=diaryData.map(e=>`
+    <div class="diary-card${e.workoutType==='back'?' is-back':''}">
+      <div class="dc-top">
+        <div>
+          <div class="dc-date">${e.date} · Нед ${e.week||'?'} · ${e.completionPct||0}%${e.duration?' · '+e.duration+' мин':''}</div>
+          <div class="dc-wname">${e.title}</div>
+        </div>
+        <div class="dc-meta">${e.tonnage} кг</div>
+      </div>
+      <ul class="dc-list">${e.exercises.map(ex=>`<li><span>${ex.name}</span><span class="dc-result">${ex.sets.map(s=>`${s.weight||'?'}×${s.reps}`).join(' | ')}</span></li>`).join('')}</ul>
+      ${e.notes?`<div class="dc-note">💬 ${e.notes}</div>`:''}
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  STATS
+// ═══════════════════════════════════════════════════════
+function renderStats(){
+  const weeks=statsData.weeks||{};
+  const wkeys=Object.keys(weeks).sort((a,b)=>parseInt(a.slice(1))-parseInt(b.slice(1)));
+  const labels=wkeys.map(k=>'Нед '+k.slice(1));
+  const tonnages=wkeys.map(k=>weeks[k].tonnage||0);
+  const sessions=wkeys.map(k=>weeks[k].sessions||0);
+  const completions=wkeys.map(k=>Math.round((weeks[k].completionTotal||0)/(weeks[k].sessions||1)));
+
+  document.getElementById('sc1').textContent=statsData.sessions||0;
+  document.getElementById('sc2').textContent=statsData.tonnage||0;
+  const bestW=tonnages.length?Math.max(...tonnages):0;
+  document.getElementById('sc3').textContent=bestW||'—';
+  document.getElementById('sc4').textContent=Object.keys(statsData.PRs||{}).length;
+
+  drawBarChart('chartTonnage',labels,tonnages,'#e8f55a');
+  drawBarChart('chartSessions',labels,sessions,'#5af5c8');
+  drawBarChart('chartCompletion',labels,completions,'#a78bfa','%');
+
+  const sel=document.getElementById('exerciseSelect');
+  const allEx=[...new Set([...Object.values(MAIN_WORKOUTS),...Object.values(BACK_WORKOUTS)].flatMap(w=>w.variants.flat()).map(e=>e.name))];
+  sel.innerHTML='<option value="">— выбери упражнение —</option>';
+  allEx.forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;sel.appendChild(o)});
+  renderPRs();
+}
+
+function renderExerciseChart(){
+  const name=document.getElementById('exerciseSelect').value;
+  if(!name){clearCanvas('chartExercise');return}
+  const pts=[];
+  [...diaryData].reverse().forEach(entry=>{
+    const ex=entry.exercises?.find(e=>e.name===name);
+    if(ex){const maxW=Math.max(...ex.sets.map(s=>parseFloat(s.weight)||0));if(maxW>0)pts.push({label:entry.date,value:maxW})}
+  });
+  if(!pts.length){clearCanvas('chartExercise');return}
+  drawLineChart('chartExercise',pts.map(p=>p.label),pts.map(p=>p.value),'#ff8c42');
+}
+
+function renderPRs(){
+  const prs=statsData.PRs||{};const keys=Object.keys(prs);
+  const container=document.getElementById('prList');
+  if(!keys.length){container.innerHTML=`<div style="text-align:center;padding:24px;color:var(--text3);font-family:var(--font-mono);font-size:.75rem">🏆 Рекорды появятся после первых тренировок</div>`;return}
+  container.innerHTML=`<div class="pr-grid">${keys.map(k=>`<div class="pr-card"><div class="pr-name">${k}</div><div class="pr-val">${prs[k].weight} кг</div><div class="pr-date">${prs[k].date}</div></div>`).join('')}</div>`;
+}
+
+// CHARTS
+function getCanvasCtx(id){
+  const canvas=document.getElementById(id);const dpr=window.devicePixelRatio||1;
+  canvas.width=(canvas.offsetWidth||canvas.parentElement.offsetWidth)*dpr;
+  canvas.height=parseInt(canvas.getAttribute('height'))*dpr;
+  canvas.style.height=canvas.getAttribute('height')+'px';
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  return{ctx,w:canvas.offsetWidth||canvas.parentElement.offsetWidth,h:parseInt(canvas.getAttribute('height'))}
+}
+function clearCanvas(id){const c=document.getElementById(id);c.getContext('2d').clearRect(0,0,c.width,c.height)}
+function drawBarChart(id,labels,values,color,suffix=''){
+  if(!labels.length)return;
+  const{ctx,w,h}=getCanvasCtx(id);ctx.clearRect(0,0,w,h);
+  const pad={t:10,r:10,b:28,l:38};const cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;
+  const max=Math.max(...values,1);const barW=Math.max(8,cw/labels.length*0.55);const gap=cw/labels.length;
+  ctx.strokeStyle='#2a2a30';ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const y=pad.t+ch*(1-i/4);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cw,y);ctx.stroke();ctx.fillStyle='#606070';ctx.font=`9px 'Space Mono',monospace`;ctx.fillText(Math.round(max*i/4)+suffix,2,y+3)}
+  labels.forEach((lbl,i)=>{
+    const x=pad.l+gap*i+gap/2-barW/2;const bh=ch*(values[i]/max);const y=pad.t+ch-bh;
+    ctx.fillStyle=color+'33';ctx.fillRect(x,pad.t,barW,ch);
+    ctx.fillStyle=color;ctx.fillRect(x,y,barW,bh);
+    ctx.fillStyle='#606070';ctx.font=`8px 'Space Mono',monospace`;ctx.fillText(lbl,x+barW/2-lbl.length*2.5,h-6);
+    if(values[i]){ctx.fillStyle=color;ctx.font=`bold 9px 'Space Mono',monospace`;ctx.fillText(values[i]+suffix,x+barW/2-(String(values[i]).length+suffix.length)*2.5,y-4)}
+  });
+}
+function drawLineChart(id,labels,values,color){
+  if(!labels.length)return;
+  const{ctx,w,h}=getCanvasCtx(id);ctx.clearRect(0,0,w,h);
+  const pad={t:10,r:10,b:28,l:38};const cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;
+  const min=Math.min(...values)*0.9,max=Math.max(...values)*1.1||1;
+  const xStep=cw/(labels.length-1||1);
+  ctx.strokeStyle='#2a2a30';ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const y=pad.t+ch*(1-i/4);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cw,y);ctx.stroke();ctx.fillStyle='#606070';ctx.font=`9px 'Space Mono',monospace`;ctx.fillText(Math.round(min+(max-min)*i/4),2,y+3)}
+  const grad=ctx.createLinearGradient(0,pad.t,0,pad.t+ch);grad.addColorStop(0,color+'55');grad.addColorStop(1,color+'00');
+  ctx.beginPath();values.forEach((v,i)=>{const x=pad.l+xStep*i,y=pad.t+ch-(ch*(v-min)/(max-min||1));i===0?ctx.moveTo(x,y):ctx.lineTo(x,y)});
+  ctx.lineTo(pad.l+xStep*(values.length-1),pad.t+ch);ctx.lineTo(pad.l,pad.t+ch);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+  ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=2;
+  values.forEach((v,i)=>{const x=pad.l+xStep*i,y=pad.t+ch-(ch*(v-min)/(max-min||1));i===0?ctx.moveTo(x,y):ctx.lineTo(x,y)});ctx.stroke();
+  values.forEach((v,i)=>{const x=pad.l+xStep*i,y=pad.t+ch-(ch*(v-min)/(max-min||1));ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.fillStyle=color;ctx.font=`bold 9px 'Space Mono',monospace`;ctx.fillText(v+'кг',x-10,y-6)});
+  labels.forEach((lbl,i)=>{const x=pad.l+xStep*i;ctx.fillStyle='#606070';ctx.font=`8px 'Space Mono',monospace`;ctx.fillText(lbl,x-lbl.length*2.5,h-6)});
+}
+
+// ═══════════════════════════════════════════════════════
+//  DRAFT
+// ═══════════════════════════════════════════════════════
+const DRAFT_KEY='ironlog_draft';
+function saveDraft(){
+  try{localStorage.setItem(DRAFT_KEY,JSON.stringify({workoutType,workout:currentWorkout,week:currentWeek,variant:manualVariant,setData,completed:[...completedExercises],notes:document.getElementById('workoutNotes').value,savedAt:Date.now()}))}catch(e){}
+}
+function loadDraftIfExists(){
+  try{
+    const raw=localStorage.getItem(DRAFT_KEY);if(!raw)return;
+    const draft=JSON.parse(raw);
+    if(Date.now()-draft.savedAt>86400000){clearDraft();return}
+    document.getElementById('draftBanner').classList.add('visible');
+  }catch(e){clearDraft()}
+}
+function restoreDraft(){
+  try{
+    const draft=JSON.parse(localStorage.getItem(DRAFT_KEY));
+    workoutType=draft.workoutType||'main';currentWorkout=draft.workout;currentWeek=draft.week;manualVariant=draft.variant;
+    setData=draft.setData;completedExercises=new Set(draft.completed||[]);
+    document.getElementById('workoutNotes').value=draft.notes||'';
+    selectWorkoutType(workoutType);
+    setTimeout(()=>{selectWorkout(currentWorkout);updateVariantUI()},50);
+    document.getElementById('draftBanner').classList.remove('visible');
+    showToast('✓ Тренировка восстановлена','ok');
+  }catch(e){clearDraft()}
+}
+function discardDraft(){clearDraft();document.getElementById('draftBanner').classList.remove('visible');showToast('Черновик удалён')}
+function clearDraft(){try{localStorage.removeItem(DRAFT_KEY)}catch(e){}}
+
+// ═══════════════════════════════════════════════════════
+//  TECH MODAL
+// ═══════════════════════════════════════════════════════
+function openTechModal(idx){
+  const w=getWorkoutData()[currentWorkout];const v=getVariant();
+  const ex=(w.variants[v]||w.variants[0])[idx];
+  document.getElementById('modalTitle').textContent=ex.name;
+  document.getElementById('modalTips').innerHTML=(ex.tips||[]).map(t=>`<li>${t}</li>`).join('');
+  document.getElementById('modalMistakes').innerHTML=(ex.mistakes||[]).map(m=>`<li>${m}</li>`).join('');
+  document.getElementById('modalYtWrap').innerHTML=ex.yt?`<a class="modal-yt" href="${ex.yt}" target="_blank">▶ Смотреть технику на YouTube</a>`:'';
+  document.getElementById('techModal').classList.add('visible');document.body.style.overflow='hidden';
+}
+function closeTechModal(e){if(e.target===document.getElementById('techModal'))closeTechModalDirect()}
+function closeTechModalDirect(){document.getElementById('techModal').classList.remove('visible');document.body.style.overflow=''}
+
+// ═══════════════════════════════════════════════════════
+//  HOME & PRINCIPLES
+// ═══════════════════════════════════════════════════════
+function renderHome(){
+  document.getElementById('homeList').innerHTML=HOME_EXERCISES.map(e=>`
+    <div class="home-card"><div class="home-icon">${e.icon}</div><div>
+      <div class="home-name">${e.name}</div>
+      <div class="home-meta">${e.meta}</div>
+      <div class="home-tip">💡 ${e.tip}</div>
+    </div></div>`).join('');
+}
+function renderPrinciples(){
+  document.getElementById('principlesList').innerHTML=PRINCIPLES.map(p=>`
+    <div class="princ-card">
+      <div class="princ-n">ПРИНЦИП ${p.n}</div>
+      <div class="princ-title">${p.title}</div>
+      <div class="princ-text">${p.text}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  TABS
+// ═══════════════════════════════════════════════════════
+function switchTab(name,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(name==='stats')renderStats();
+  if(name==='diary')renderDiary();
+}
+
+// TOAST
+let toastTimer;
+function showToast(msg,type=''){
+  const el=document.getElementById('toast');el.textContent=msg;el.className='toast show'+(type?' '+type:'');
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3000)
+}
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+buildWorkoutControls();
+loadWorkout();
+renderHome();
+renderPrinciples();
+loadDraftIfExists();
+loadFromGitHub();
+</script>
+</body>
+</html>
