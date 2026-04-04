@@ -1,5 +1,127 @@
 [
   {
+    "date": "04.04.2026",
+    "dateISO": "2026-04-04",
+    "week": 2,
+    "workout": "A",
+    "variant": 1,
+    "workoutType": "main",
+    "title": "ТРЕНИРОВКА A",
+    "duration": null,
+    "completed": 5,
+    "total": 5,
+    "completionPct": 100,
+    "tonnage": 3705,
+    "notes": "",
+    "exercises": [
+      {
+        "name": "Жим гантелей лёжа",
+        "sets": [
+          {
+            "weight": "10",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "10",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "10",
+            "reps": "10",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Жим ногами в тренажёре",
+        "sets": [
+          {
+            "weight": "50",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "70",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "70",
+            "reps": "12",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Тяга к поясу на блоке (сидя)",
+        "sets": [
+          {
+            "weight": "25",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "25",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "25",
+            "reps": "12",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Разведения гантелей в стороны",
+        "sets": [
+          {
+            "weight": "7.5",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "7.5",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "7.5",
+            "reps": "10",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Скручивания на пресс",
+        "sets": [
+          {
+            "weight": "",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "",
+            "reps": "9",
+            "done": true
+          }
+        ],
+        "notes": ""
+      }
+    ]
+  },
+  {
     "date": "29.03.2026",
     "dateISO": "2026-03-29",
     "week": 1,
