@@ -1,5 +1,179 @@
 [
   {
+    "date": "11.04.2026",
+    "dateISO": "2026-04-11",
+    "week": 2,
+    "workout": "B",
+    "variant": 1,
+    "workoutType": "main",
+    "title": "ТРЕНИРОВКА B",
+    "duration": 86703,
+    "completed": 7,
+    "total": 7,
+    "completionPct": 100,
+    "tonnage": 6325,
+    "notes": "",
+    "exercises": [
+      {
+        "name": "Жим на наклонной скамье (гантели)",
+        "sets": [
+          {
+            "weight": "10",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "10",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "10",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "10",
+            "reps": "12",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Жим ногами в тренажёре",
+        "sets": [
+          {
+            "weight": "70",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "70",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "70",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "70",
+            "reps": "12",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Тяга к поясу на блоке",
+        "sets": [
+          {
+            "weight": "35",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "35",
+            "reps": "11",
+            "done": true
+          },
+          {
+            "weight": "35",
+            "reps": "10",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Уги нания ног в тренажёре лёжа",
+        "sets": [
+          {
+            "weight": "15",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "15",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "15",
+            "reps": "10",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Французский жим лёжа",
+        "sets": [
+          {
+            "weight": "10",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "10",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "10",
+            "reps": "12",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Сгибания на блоке (бицепс)",
+        "sets": [
+          {
+            "weight": "15",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "15",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "15",
+            "reps": "12",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Подъём ног в висе",
+        "sets": [
+          {
+            "weight": "",
+            "reps": "7",
+            "done": true
+          },
+          {
+            "weight": "",
+            "reps": "8",
+            "done": true
+          },
+          {
+            "weight": "",
+            "reps": "6",
+            "done": true
+          }
+        ],
+        "notes": ""
+      }
+    ]
+  },
+  {
     "date": "08.04.2026",
     "dateISO": "2026-04-08",
     "week": 3,
