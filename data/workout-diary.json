@@ -1,5 +1,127 @@
 [
   {
+    "date": "15.04.2026",
+    "dateISO": "2026-04-15",
+    "week": 3,
+    "workout": "A",
+    "variant": 0,
+    "workoutType": "main",
+    "title": "ТРЕНИРОВКА A",
+    "duration": 109950,
+    "completed": 5,
+    "total": 5,
+    "completionPct": 100,
+    "tonnage": 5008,
+    "notes": "",
+    "exercises": [
+      {
+        "name": "Жим штанги лёжа",
+        "sets": [
+          {
+            "weight": "30",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "30",
+            "reps": "10",
+            "done": true
+          },
+          {
+            "weight": "30",
+            "reps": "10",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Жим ногами в тренажёре",
+        "sets": [
+          {
+            "weight": "70",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "80",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "80",
+            "reps": "12",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Тяга верхнего блока к груди",
+        "sets": [
+          {
+            "weight": "35",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "40",
+            "reps": "8",
+            "done": true
+          },
+          {
+            "weight": "40",
+            "reps": "8",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Жим гантелей сидя (с опорой)",
+        "sets": [
+          {
+            "weight": "8",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "8",
+            "reps": "12",
+            "done": true
+          },
+          {
+            "weight": "8",
+            "reps": "12",
+            "done": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "name": "Планка на предплечьях",
+        "sets": [
+          {
+            "weight": "",
+            "reps": "40 сек",
+            "done": true
+          },
+          {
+            "weight": "",
+            "reps": "40 сек",
+            "done": true
+          },
+          {
+            "weight": "",
+            "reps": "40 сек",
+            "done": true
+          }
+        ],
+        "notes": ""
+      }
+    ]
+  },
+  {
     "date": "11.04.2026",
     "dateISO": "2026-04-11",
     "week": 2,
